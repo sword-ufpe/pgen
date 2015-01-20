@@ -1,0 +1,103 @@
+---
+language:
+  name: Arithmetic Expression
+  prefix: AX_
+  startRule: EXPRESSION
+  startState: normal
+  outputFile: ax.c
+  helperFile: ax_helper.c
+  type: 'LL(*)'
+
+# ----------------------------------------------------------------------------------------------------------------------
+# THE STATE LIST
+# ~~~~~~~~~~~~~~
+#
+#     The state list is just a list of states that can be used by the tokenizer. By default there is always the 
+# 'default' (hidden) state. It will be always present even if the states node is not present.
+# ----------------------------------------------------------------------------------------------------------------------
+states:
+  - normal
+  - comment
+
+# ----------------------------------------------------------------------------------------------------------------------
+# THE TOKEN LIST
+# ~~~~~~~~~~~~~~
+#
+#     The the tokenizer (lexical parser) is a finite state machine, it accepts different tokens on different states.
+#     The tokens field is a list, each item MUST contain at least the 'name' and 'regex' properties.
+#     The 'name' property is the name of the token. Tokens whose names starts with '%' are discarded by the lexical 
+# parser, i.e. they are not put on the token list for the grammar parser. All token names must be made of upper-case
+# characters plus the optional underline.
+#     The 'regex' property is a regular expression that matches the token. Advanced regex features can be used, such as
+# positive and negative lookahead groups.
+#     The 'states' field is optional, it tells the tokenizer on which state the token can be accepted. If it is not
+# present, the tokenizer will try to match and accept the token on any state.
+#     The 'set_state' field is optional. It tells the tokenizer to change to a specific state when the token is matched.
+# this field is useful when there is a need to work with multiple states where different tokens are accepted on 
+# different states.
+# ----------------------------------------------------------------------------------------------------------------------
+tokens:
+  # Discarded Tokens (their name MUST start with a $)
+  # Discarded Tokens are read and then ignored. They are not passed to the Grammar
+  - 
+    name: $WHITESPACE
+    regex: '[ \r\n\t]+'
+    states: [normal, comment]
+  - 
+    name: $COMMENT_START
+    regex: '/\*'
+    states: [normal]
+    set_state: comment
+  - 
+    name: $COMMENT_END
+    regex: '\*/'
+    states: [comment]
+    set_state: normal
+  - 
+    name: $COMMENT_CHAR
+    regex: '.'
+    states: [comment]
+  # Used Tokens
+  # Used Tokens are read and passed to the grammar as terminal symbols.
+  - 
+    name: ADD
+    regex: '\+'
+    states: [normal]
+  - 
+    name: SUB
+    regex: '-'
+    states: [normal]
+  - 
+    name: MUL
+    regex: '\*'
+    states: [normal]
+  - 
+    name: DIV
+    regex: '/'
+    states: [normal]
+  - 
+    name: FLOAT
+    regex: '[0-9]+\.[0-9]+'
+    states: [normal]
+  - 
+    name: INTEGER
+    regex: '[0-9]+'
+    states: [normal]
+
+# The Grammar
+# The Grammar's Non-Terminal Symbols should be written on lower-case.
+# On the LL(*) parser the rules are parsed from the first to the last, i.e. the first rule is tried first.
+# The empty symbol (epsilon) can be written as two single quotes ''.
+grammar:
+  - number:
+    - FLOAT
+    - INTEGER
+  - operator:
+    - ADD
+    - SUB
+    - DIV
+    - MUL
+  - expression:
+    - number operator expression
+    - number
+...

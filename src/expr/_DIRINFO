@@ -1,0 +1,147 @@
+----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=
+
+	Directory: src/expr/
+	
+	This directory contains the classes that are used to parse, represent and
+compile Regular Expressions into C99 code. The following classes are present in
+this directory:
+	
+	* ICompilable
+	* Alternative
+	* Character
+	* CharClass
+	* Quantified
+	* Range
+	* Sequence
+	* Text
+	* Regex
+	* Code
+	
+	They are further described below.
+	
+----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=
+
+	Class: ICompilable
+	Files: ICompilable.h, ICompilable.cpp
+	
+	This class is the base class for all classes that can be compiled to C99
+code. All classes in this directory inherit from ICompilable, except for the 
+"Code" class, which is a special class.
+
+----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=
+
+	Class: Alternative : ICompilable
+	Files: Alternative.h, Alternative.cpp
+	
+	The Alternative class represents a list of expressions that can be accepted
+by the parser. On the Regular Expression it is represented by the '|' character.
+
+----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=
+
+	Class: Character : ICompilable
+	Files: Character.h, Character.cpp
+	
+	The Character class represents a single character that should be matched on
+the Regular Expression. For instance, if someone creates a regular expression
+containing a single character 'x', this character will be encoded using this
+class.
+
+----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=
+
+	Class: CharClass : ICompilable
+	Files: CharClass.h, CharClass.cpp
+	
+	The CharClass represents a class of characters that can be matched on a
+position of the Regular Expression. For instance, if someone uses the following
+regular expression '[0-9A-F]', it will be encoded using this class.
+
+----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=
+
+	Class: Quantified : ICompilable
+	Files: Quantified.h, Quantified.cpp
+	
+	The Quantified class represents a quantified expression on the Regular
+Expression. It has the following parameters: minimum numbers of characters,
+maximum number of characters, greediness.
+	The Regular Expression's quantifiers are encoded as follows:
+		EXPR		MIN			MAX			GREEDY
+		'a*'		0			INFINITE	YES
+		'a+'		1			INFINITE	YES
+		'a?'		0			1			YES
+		'a{m}'		m			m			YES
+		'a{m,}'		m			INFINITE	YES
+		'a{,n}'		0			n			YES
+		'a{m,n}'	m			n			YES
+		'a*?'		0			INFINITE	NO
+		'a+?'		1			INFINITE	NO
+		'a??'		0			1			NO
+		'a{m}?'		m			m			NO
+		'a{m,}?'	m			INFINITE	NO
+		'a{,n}?'	0			n			NO
+		'a{m,n}?'	m			n			NO
+		
+----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=
+
+	Class: Range : ICompilable
+	Files: Range.h, Range.cpp
+	
+	The Range class represents a single range of characters, e.g. A-Z. This
+class is not used directly. It is currently used by the CharClass to deal with
+character range definitions inside the character class definition.
+
+----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=
+
+	Class: Sequence : ICompilable
+	Files: Sequence.h, Sequence.cpp
+	
+	The Sequence class represents a sequence of sub-expressions that have to be
+matched for a given regular expression. For instance, consider the following
+regular expression: '[a-z]+[0-9]b'. It requires the following sub-expressions to
+be matched in a row:
+	1. '[a-z]+', a Quantified CharClass
+	2. '[0-9]', a single occurence of a CharClass
+	3. 'b', a single Character 'b'.
+	
+----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=
+
+	Class: Text : ICompilable
+	Files: Text.h, Text.cpp
+	
+	The Text class was built as an optimization to replace Sequences of 
+Characters on Regular Expressions. For instance, consider the following Regular
+expression: 'abcd'. It could be represented by a Sequence of Characters as 
+follows:
+
+	* Sequence(Character('a'), Character('b'), Character('c'), Character('d'))
+	
+However, it could be more efficiently treated as a text string as follows:
+	
+	* Text("abcd")
+	
+It is also faster to match for strings than Sequences of characters in a row in
+the C99 language.
+
+----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=
+
+	Class: Regex : Alternative
+	Files: Regex.h, Regex.cpp
+	
+	This is a special class, it behaves as an Alternative class that is able to
+parse a textual Regular Expression into a memory structure that uses all the 
+other classes presented above. This class is used to parse the textual regular
+expression into a representation that can be used directly by the rest of the
+application.
+
+----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=
+
+	Class: Code
+	Files: Code.h, Code.cpp
+	
+	This is the most different class from this directory. Its main function is
+to provide a way to compile many regular expressions into a single file, while
+removing the redundant expressions. That is, the code for a single expression 
+will not be added twice to the compiled file.
+
+----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=----=
+	
+		

@@ -2,4 +2,6 @@
 parg.txt
 .codelite
 /doc/project
-parg.txt
+parg.txt/pgen.mk
+/pgen.txt
+/pgen.mk

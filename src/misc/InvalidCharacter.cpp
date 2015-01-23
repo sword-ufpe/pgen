@@ -7,7 +7,7 @@
 
 #include "InvalidCharacter.h"
 
-namespace pagen {
+namespace pgen {
 
 InvalidCharacter::InvalidCharacter() {
 

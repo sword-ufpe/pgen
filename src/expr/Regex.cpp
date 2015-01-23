@@ -21,7 +21,7 @@
 
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 Regex::Regex(string expression) {
 	this->parse(expression);

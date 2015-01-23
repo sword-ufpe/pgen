@@ -10,7 +10,7 @@
 
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 RegexException::RegexException(string expression, int column, string reason):
 expression(expression), reason(reason), column(column)

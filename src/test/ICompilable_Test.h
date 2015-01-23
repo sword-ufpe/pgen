@@ -29,9 +29,9 @@ private:
 	 * @param extra extra code to compile (helper functions, etc).
 	 * @remark this method creates the source and saves it on the file specified by fileName.
 	 */
-	static void createSource(string fileName, pagen::ICompilable & comp, string extra) {
+	static void createSource(string fileName, pgen::ICompilable & comp, string extra) {
 		ofstream o(fileName);
-		o << pagen::Code::getHelper() << extra;
+		o << pgen::Code::getHelper() << extra;
 		o << comp.compile();
 		o << "int main(int argc, char* argv[]) {" << endl;
 		o << "\tchar* buffer = NULL;" << endl;
@@ -63,9 +63,9 @@ private:
 	 * @param chain the names of the chained functions, separated by comma. eg. "func1, func2, func3"
 	 * @remark this method creates the source and saves it on the file specified by fileName.
 	 */
-	static void ccreateSource(string fileName, pagen::ICompilable & comp, string extra, string chain) {
+	static void ccreateSource(string fileName, pgen::ICompilable & comp, string extra, string chain) {
 		ofstream o(fileName);
-		o << pagen::Code::getHelper() << extra;
+		o << pgen::Code::getHelper() << extra;
 		o << comp.ccompile();
 		o << "chainptr testChain[] = {" << chain << ", NULL};" << endl << endl;
 		o << "int main(int argc, char* argv[]) {" << endl;
@@ -104,7 +104,7 @@ public:
 	 * @remark the source code created in the process is removed after the compilation is
 	 * complete.
 	 */
-	static void ccompileSource(pagen::ICompilable & comp, string extra, string chain) {
+	static void ccompileSource(pgen::ICompilable & comp, string extra, string chain) {
 		ccreateSource("___test___.c", comp, extra, chain);			// create C source code
 		int res = system("gcc -o ___test___ ___test___.c") >> 8;	// compile using gcc
 		CPPUNIT_ASSERT( res == 0 ); 								// assert a successfull compilation
@@ -125,7 +125,7 @@ public:
 	 * @remark the source code created in the process is removed after the compilation is
 	 * complete.
 	 */
-	static void compileSource(pagen::ICompilable & comp, string extra) {
+	static void compileSource(pgen::ICompilable & comp, string extra) {
 		createSource("___test___.c", comp, extra);						// create C source code
 		int res = system("gcc -o ___test___ ___test___.c") >> 8;	// compile using gcc
 		CPPUNIT_ASSERT( res == 0 ); 								// assert a successfull compilation
@@ -145,7 +145,7 @@ public:
 	 * @remark the source code created in the process is removed after the compilation is
 	 * complete.
 	 */
-	static void compileSource(pagen::ICompilable & comp) {
+	static void compileSource(pgen::ICompilable & comp) {
 		compileSource(comp, "");
 	}
 
@@ -182,7 +182,7 @@ public:
 	/**
 	 * Asserts the name of the object.
 	 */
-	static void assertName(pagen::ICompilable &comp, string name, string file, int line) {
+	static void assertName(pgen::ICompilable &comp, string name, string file, int line) {
 		stringstream msg;
 		msg << "Error asserting the name of an ICompilable object." << endl <<
 				" Expected '" << name << "' but found '" << comp.name() << "'. On " << file << ":" << line << endl;

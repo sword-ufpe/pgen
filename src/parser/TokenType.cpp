@@ -18,7 +18,7 @@
 
 using namespace std;
  
-namespace pagen {
+namespace pgen {
 	
 //----------------------------------------------------------------------------------------------------------------------
 TokenType::TokenType(Language* language, string expression, string name, int typeId, bool discard, int setState, 

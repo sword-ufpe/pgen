@@ -9,29 +9,35 @@
  #ifndef LLSTARRULE_H_
  #define LLSTARRULE_H_
  
- namespace pagen { class LLStarRule; };
+ namespace pgen { class LLStarRule; };
  
  // STL
  #include <string>
  #include <vector>
  // Other
+ #include "IGrammarRule.h"
  #include "Language.h"
  
  using namespace std;
- namespace pagen {
+ namespace pgen {
 	 
-	class LLStarRule {
+	class LLStarRule : public IGrammarRule {
 	public:
-		Language* language;
-		string name;
-		vector<vector<int>*> options;
+		/**
+		 * Using IGrammarRule's constructors.
+		 */
+		using IGrammarRule::IGrammarRule;
 		
-		LLStarRule(Language *language, string& ruleName);
+		/**
+		 * Destructor that does nothing for now.
+		 */
 		virtual ~LLStarRule();
 		
-		void addOption(string& body);
-		void splitSymbols(string& body, vector<string>& items);
-		string compile();
+		/**
+		 * Generate C99 code that is able to parse the grammar.
+		 * @return the C99 code that is able to parse the grammar.
+		 */
+		virtual string compile();
 	};
  };
  

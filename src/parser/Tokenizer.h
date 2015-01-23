@@ -9,7 +9,7 @@
 #ifndef TOKENIZER_H_
 #define TOKENIZER_H_
 
-namespace pagen { class Tokenizer; };
+namespace pgen { class Tokenizer; };
 
 // STL
 #include <string>
@@ -19,12 +19,11 @@ namespace pagen { class Tokenizer; };
 #include "Language.h"
 
 using namespace std;
-namespace pagen {
+namespace pgen {
 	
 	class Tokenizer {
 	private:
 		Language* language;							//< The language object
-		map<string, TokenType*> typeList;			//< map of TokenTypes, indexed by their names.
 		
 		void codeDefines(stringstream& s);
 		void codeStructs(stringstream& s);
@@ -36,6 +35,8 @@ namespace pagen {
 		void codeTokenizeString(stringstream &s);
 		void codeTokenizeFile(stringstream &s);
 	public:
+		map<string, TokenType*> typeList;			//< map of TokenTypes, indexed by their names.
+		
 		Tokenizer(Language* language);
 		~Tokenizer();
 		

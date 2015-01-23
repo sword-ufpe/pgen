@@ -28,7 +28,7 @@ using namespace std;
  */
 class QuantifiedTest : public CppUnit::TestFixture {
 private:
-	pagen::Range *single, *normal, *inverted;
+	pgen::Range *single, *normal, *inverted;
 public:
 	/**
 	 * Returns the suite of tests for this fixture.
@@ -53,8 +53,8 @@ public:
 
 	void testCompile() {
 		// test with a digit quantified between 2 an 5 times [0-9]{2,5} (greedy)
-		pagen::Range *r = new pagen::Range('0','9');
-		pagen::Quantified *q = new pagen::Quantified(r, 2, 5, true);
+		pgen::Range *r = new pgen::Range('0','9');
+		pgen::Quantified *q = new pgen::Quantified(r, 2, 5, true);
 		ICompilableTest::compileSource(*q, q->expr->compile());
 		ICompilableTest::assert("0", 255,__FILE__,__LINE__); 		// false
 		ICompilableTest::assert("00", 2,__FILE__,__LINE__);		// true
@@ -73,11 +73,11 @@ public:
 		CPPUNIT_ICOMPILABLE_ASSERTNAME(*q, "qtg_2_5_ra_48_57");
 		delete q;
 		// Test with an hexadecimal digit quantified between 0-3 times [0-9A-Fa-f]*? (lazy)
-		pagen::CharClass *c = new pagen::CharClass();
+		pgen::CharClass *c = new pgen::CharClass();
 		c->add('0','9');
 		c->add('A','F');
 		c->add('a','f');
-		q = new pagen::Quantified(c, 0, 3, false);
+		q = new pgen::Quantified(c, 0, 3, false);
 		// since the expression can match 0 to 3 characters, all expressions are valid (matching 0 characters).
 		// since it is a lazy match, they all should match 0 characters.
 		// the lazy match is useful when chained.

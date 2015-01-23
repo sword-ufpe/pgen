@@ -10,7 +10,7 @@
 #include "Character.h"
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 //-------------------------------------------------------------------------------------------
 Character::Character(unsigned int c):

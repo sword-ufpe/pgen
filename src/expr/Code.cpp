@@ -18,158 +18,198 @@
 #include <sstream>
 #include <algorithm>
 
-namespace pagen {
+namespace pgen {
 
 const string Code::helperCode(
-		"#include <stdlib.h>\n"
-		"#include <stdio.h>\n"
-		"#include <errno.h>\n"
-		"#include <string.h>\n"
-		"\n"
-		"unsigned int next_utf8(char * text, int * pos) {\n"
-		"\tregister unsigned int c,d;\n"
-		"\tc = text[(*pos)++];\n"
-		"\tif ((c & 0x80) == 0) return c;\n"
-		"\tif ((c & 0xE0) == 0xC0) {\n"
-		"\t\tc &= 0x3F;\n"
-		"\t\tc <<= 6;\n"
-		"\t\td = text[(*pos)++];\n"
-		"\t\tif ((d & 0x80) == 0) goto utf8_error;\n"
-		"\t\tc |= (d & 0x3F);\n"
-		"\t\treturn c;\n"
-		"\t}\n"
-		"\tif ((c & 0xF0) == 0xE0) {\n"
-		"\t\tc &= 0x1F;\n"
-		"\t\tc <<= 6;\n"
-		"\t\td = text[(*pos)++];\n"
-		"\t\tif ((d & 0x80) == 0) goto utf8_error;\n"
-		"\t\tc |= (d & 0x3F);\n"
-		"\t\tc <<= 6;\n"
-		"\t\td = text[(*pos)++];\n"
-		"\t\tif ((d & 0x80) == 0) goto utf8_error;\n"
-		"\t\tc |= (d & 0x3F);\n"
-		"\t\treturn c;\n"
-		"\t}\n"
-		"\tif ((c & 0xF8) == 0xF0) {\n"
-		"\t\tc &= 0x0F;\n"
-		"\t\tc <<= 6;\n"
-		"\t\td = text[(*pos)++];\n"
-		"\t\tif ((d & 0x80) == 0) goto utf8_error;\n"
-		"\t\tc |= (d & 0x3F);\n"
-		"\t\tc <<= 6;\n"
-		"\t\td = text[(*pos)++];\n"
-		"\t\tif ((d & 0x80) == 0) goto utf8_error;\n"
-		"\t\tc |= (d & 0x3F);\n"
-		"\t\tc <<= 6;\n"
-		"\t\td = text[(*pos)++];\n"
-		"\t\tif ((d & 0x80) == 0) goto utf8_error;\n"
-		"\t\tc |= (d & 0x3F);\n"
-		"\t\treturn c;\n"
-		"\t}\n"
-		"\tutf8_error:\n"
-		"\tprintf(\"Invalid UTF-8 character on source file.\");\n"
-		"\tabort();\n"
-		"}\n"
-		"\n"
-		"unsigned int strlen_utf8(char * text) {\n"
-		"\tint pos = 0;\n"
-		"\twhile (next_utf8(text, &pos) != 0);\n"
-		"\treturn (pos-1);\n"
-		"}\n"
-		"\n"
-		"typedef struct _stack_int {\n"
-		"\tint* data;\n"
-		"\tunsigned int size;\n"
-		"\tint top;\n"
-		"} stack_int;\n"
-		"\n"
-		"void stack_int_init(stack_int* s) {\n"
-		"\ts->size = 32;\n"
-		"\ts->data = (int*) malloc(sizeof(int) * s->size);\n"
-		"\ts->top = 0;\n"
-		"}\n"
-		"\n"
-		"void stack_int_free(stack_int* s) {\n"
-		"\tif (s != NULL && s->data != NULL) free(s->data);\n"
-		"}\n"
-		"\n"
-		"int stack_int_grow(stack_int* s) {\n"
-		"\ts->size *= 2;\n"
-		"\tvoid* ndata = realloc(s->data, sizeof(int) * s->size);\n"
-		"\tif (ndata == NULL) s->size /= 2;\n"
-		"\telse s->data = (int*) ndata;\n"
-		"\treturn (s->data == ndata);\n"
-		"}\n"
-		"\n"
-		"void stack_int_push(stack_int* s, int val) {\n"
-		"\tif (s->top >= s->size && !stack_int_grow(s)) {\n"
-		"\t\tprintf(\"Could not allocate enough memory for a regex stack.\");\n"
-		"\t\tabort();\n"
-		"\t}\n"
-		"\ts->data[s->top++] = val;\n"
-		"}\n"
-		"\n"
-		"int stack_int_pop(stack_int *s) {\n"
-		"\tif (s->top > 0) return s->data[--s->top];\n"
-		"\treturn 0;\n"
-		"}\n"
-		"\n"
-		/** The following union makes sure that the space used by the function pointer array
-		 * also allows saving data pointers on them.
-		 */
-		"typedef union _chainptr {\n"
-		"\tint (*func)();\n"
-		"\tunion _chainptr * subchain;\n"
-		"} chainptr;\n\n"
-		/**
-		 * The following function is a dummy function to be used as an indicator that the
-		 * next pointer in the chain function array is a pointer to the next chain array
-		 * instead of the next chain function.
-		 */
-		"int CHAIN_JUMP() { return -1; }\n\n"
-		/** the next lines defines a macro called chain_next(text,chain) which is equivalent of a function as follows:
-		 * if (chain[0].func == CHAIN_JUMP) {
-		 *   if (chain[1].subchain[0].func != NULL) {
-		 *   	if (chain[1].subchain[1].func != NULL) {
-		 *   		return (int (*)(char*, chainptr*))(chain[1].subchain[0].func)(text, &chain[1].subchain[1]);
-		 *   	} else {
-		 *   		return (int (*)(char*))(chain[1].subchain[0].func)(text);
-		 *   	}
-		 *   } else {
-		 *   	return 0;
-		 *   }
-		 * } else if (chain[0].func != NULL) { // the next function in the chain should be called
-		 *   if (chain[1].func != NULL) { // the next function in the chain is not the last one
-		 *     return (int (*)(char*, int (*)()))(chain[0].func) (text, &chain[1]); // return what the next chain function returns.
-		 *   } else { // the next function i the chain is the last one
-		 *     return (int (*)(char*))(chain[0].func) (text); // return what the last chain function returns.
-		 *   }
-		 * } else { // there are no chain functions left to be called.
-		 *   return 0;
-		 * }
-		 * As such, this macro must be used to call the next chain function on the chained version of the compiled methods.
-		 * this macro can be interpreted as a value an must be summed with the methods' own index increment.
-		 */
-		"#define chain_next(text, chain) \\\n"
-		"( \\\n"
-		"	chain[0].func == CHAIN_JUMP ? \\\n"
-		"	( \\\n"
-		"		chain[1].subchain[0].func != NULL ? \\\n"
-		"		( \\\n"
-		"			chain[1].subchain[1].func != NULL ? \\\n"
-		"				((int (*)(char*, chainptr*))chain[1].subchain[0].func)(text, &chain[1].subchain[1]) : \\\n"
-		"				((int (*)(char*))chain[1].subchain[0].func)(text) \\\n"
-		"		) : 0 \\\n"
-		"	) : ( \\\n"
-		"		chain[0].func != NULL ? \\\n"
-		"		( \\\n"
-		"			chain[1].func != NULL ? \\\n"
-		"				((int (*)(char*, chainptr*))chain[0].func)(text, &chain[1]) : \\\n"
-		"				((int (*)(char*))chain[0].func)(text) \\\n"
-		"		) : 0 \\\n"
-		"	) \\\n"
-		")\n"
-		"\n"
+	"#include <stdlib.h>"																						"\n"
+	"#include <stdio.h>"																						"\n"
+	"#include <errno.h>"																						"\n"
+	"#include <string.h>"																						"\n"
+	""																											"\n"
+	"unsigned int next_utf8(char * text, int * pos) {"															"\n"
+	" register unsigned int c,d;"																				"\n"
+	" c = text[(*pos)++];"																						"\n"
+	" if ((c & 0x80) == 0) return c;"																			"\n"
+	" if ((c & 0xE0) == 0xC0) {"																				"\n"
+	"  c &= 0x3F;"																								"\n"
+	"  c <<= 6;"																								"\n"
+	"  d = text[(*pos)++];"																						"\n"
+	"  if ((d & 0x80) == 0) goto utf8_error;"																	"\n"
+	"  c |= (d & 0x3F);"																						"\n"
+	"  return c;"																								"\n"
+	" }"																										"\n"
+	" if ((c & 0xF0) == 0xE0) {"																				"\n"
+	"  c &= 0x1F;"																								"\n"
+	"  c <<= 6;"																								"\n"
+	"  d = text[(*pos)++];"																						"\n"
+	"  if ((d & 0x80) == 0) goto utf8_error;"																	"\n"
+	"  c |= (d & 0x3F);"																						"\n"
+	"  c <<= 6;"																								"\n"
+	"  d = text[(*pos)++];"																						"\n"
+	"  if ((d & 0x80) == 0) goto utf8_error;"																	"\n"
+	"  c |= (d & 0x3F);"																						"\n"
+	"  return c;"																								"\n"
+	" }"																										"\n"
+	" if ((c & 0xF8) == 0xF0) {"																				"\n"
+	"  c &= 0x0F;"																								"\n"
+	"  c <<= 6;"																								"\n"
+	"  d = text[(*pos)++];"																						"\n"
+	"  if ((d & 0x80) == 0) goto utf8_error;"																	"\n"
+	"  c |= (d & 0x3F);"																						"\n"
+	"  c <<= 6;"																								"\n"
+	"  d = text[(*pos)++];"																						"\n"
+	"  if ((d & 0x80) == 0) goto utf8_error;"																	"\n"
+	"  c |= (d & 0x3F);"																						"\n"
+	"  c <<= 6;"																								"\n"
+	"  d = text[(*pos)++];"																						"\n"
+	"  if ((d & 0x80) == 0) goto utf8_error;"																	"\n"
+	"  c |= (d & 0x3F);"																						"\n"
+	"  return c;"																								"\n"
+	" }"																										"\n"
+	" utf8_error:"																								"\n"
+	" printf(\"Invalid UTF-8 character on source file.\");"														"\n"
+	" abort();"																									"\n"
+	"}"																											"\n"
+	""																											"\n"
+	"unsigned int strlen_utf8(char * text) {"																	"\n"
+	" int pos = 0;"																								"\n"
+	" while (next_utf8(text, &pos) != 0);"																		"\n"
+	" return (pos-1);"																							"\n"
+	"}"																											"\n"
+	""																											"\n"
+	"typedef struct _stack_int {"																				"\n"
+	" int* data;"																								"\n"
+	" unsigned int size;"																						"\n"
+	" int top;"																									"\n"
+	"} stack_int;"																								"\n"
+	""																											"\n"
+	"void stack_int_init(stack_int* s) {"																		"\n"
+	" s->size = 32;"																							"\n"
+	" s->data = (int*) malloc(sizeof(int) * s->size);"															"\n"
+	" s->top = 0;"																								"\n"
+	"}"																											"\n"
+	""																											"\n"
+	"void stack_int_free(stack_int* s) {"																		"\n"
+	" if (s != NULL && s->data != NULL) free(s->data);"															"\n"
+	"}"																											"\n"
+	""																											"\n"
+	"int stack_int_grow(stack_int* s) {"																		"\n"
+	" s->size *= 2;"																							"\n"
+	" void* ndata = realloc(s->data, sizeof(int) * s->size);"													"\n"
+	" if (ndata == NULL) s->size /= 2;"																			"\n"
+	" else s->data = (int*) ndata;"																				"\n"
+	" return (s->data == ndata);"																				"\n"
+	"}"																											"\n"
+	""																											"\n"
+	"void stack_int_push(stack_int* s, int val) {"																"\n"
+	" if (s->top >= s->size && !stack_int_grow(s)) {"															"\n"
+	"  printf(\"Could not allocate enough memory for a regex stack.\");"										"\n"
+	"  abort();"																								"\n"
+	" }"																										"\n"
+	" s->data[s->top++] = val;"																					"\n"
+	"}"																											"\n"
+	""																											"\n"
+	"int stack_int_pop(stack_int *s) {"																			"\n"
+	" if (s->top > 0) return s->data[--s->top];"																"\n"
+	" return 0;"																								"\n"
+	"}"																											"\n"
+	""																											"\n"
+	/** The following union makes sure that the space used by the function pointer array
+	 * also allows saving data pointers on them.
+	 */
+	"typedef union _chainptr {"																					"\n"
+	" int (*func)();"																							"\n"
+	" union _chainptr * subchain;"																				"\n"
+	"} chainptr;"																								"\n"
+	/**
+	 * The following function is a dummy function to be used as an indicator that the
+	 * next pointer in the chain function array is a pointer to the next chain array
+	 * instead of the next chain function.
+	 */
+	"int CHAIN_JUMP() { return -1; }"																			"\n"
+	/** the next lines defines a macro called chain_next(text,chain) which is equivalent of a function as follows:
+	 * if (chain[0].func == CHAIN_JUMP) {
+	 *   if (chain[1].subchain[0].func != NULL) {
+	 *   	if (chain[1].subchain[1].func != NULL) {
+	 *   		return (int (*)(char*, chainptr*))(chain[1].subchain[0].func)(text, &chain[1].subchain[1]);
+	 *   	} else {
+	 *   		return (int (*)(char*))(chain[1].subchain[0].func)(text);
+	 *   	}
+	 *   } else {
+	 *   	return 0;
+	 *   }
+	 * } else if (chain[0].func != NULL) { // the next function in the chain should be called
+	 *   if (chain[1].func != NULL) { // the next function in the chain is not the last one
+	 *     return (int (*)(char*, int (*)()))(chain[0].func) (text, &chain[1]); // return what the next chain function returns.
+	 *   } else { // the next function i the chain is the last one
+	 *     return (int (*)(char*))(chain[0].func) (text); // return what the last chain function returns.
+	 *   }
+	 * } else { // there are no chain functions left to be called.
+	 *   return 0;
+	 * }
+	 * As such, this macro must be used to call the next chain function on the chained version of the compiled methods.
+	 * this macro can be interpreted as a value an must be summed with the methods' own index increment.
+	 */
+	"#define chain_next(text, chain) \\"																		"\n"
+	"( \\"																										"\n"
+	"	chain[0].func == CHAIN_JUMP ? \\"																		"\n"
+	"	( \\"																									"\n"
+	"		chain[1].subchain[0].func != NULL ? \\"																"\n"
+	"		( \\"																								"\n"
+	"			chain[1].subchain[1].func != NULL ? \\"															"\n"
+	"				((int (*)(char*, chainptr*))chain[1].subchain[0].func)(text, &chain[1].subchain[1]) : \\"	"\n"
+	"				((int (*)(char*))chain[1].subchain[0].func)(text) \\"										"\n"
+	"		) : 0 \\"																							"\n"
+	"	) : ( \\"																								"\n"
+	"		chain[0].func != NULL ? \\"																			"\n"
+	"		( \\"																								"\n"
+	"			chain[1].func != NULL ? \\"																		"\n"
+	"				((int (*)(char*, chainptr*))chain[0].func)(text, &chain[1]) : \\"							"\n"
+	"				((int (*)(char*))chain[0].func)(text) \\"													"\n"
+	"		) : 0 \\"																							"\n"
+	"	) \\"																									"\n"
+	")"																											"\n"
+	""																											"\n"
+	"typedef struct _ast_node {"																				"\n"
+	" int tokenId;"																								"\n"
+	" char* data;"																								"\n"
+	" struct _ast_node* nextSibling;"																			"\n"
+	" struct _ast_node* firstChild;"																			"\n"
+	"} ast_node;"																								"\n"
+	""																											"\n"
+	"ast_node* ast_new_node() {"																				"\n"
+	" ast_node* node = (ast_node*)malloc(sizeof(ast_node));"													"\n"
+	" node->tokenId = -1;"																						"\n"
+	" node->data = NULL;"																						"\n"
+	" node->nextSibling = NULL;"																				"\n"
+	" node->firstChild = NULL;"																					"\n"
+	" return node;"																								"\n"
+	"}"																											"\n"
+	""																											"\n"
+	"void ast_add_child(ast_node* parent, ast_node* child) {"													"\n"
+	" child->nextSibling = parent->firstChild;"																	"\n"
+	" parent->firstChild = child;"																				"\n"
+	"}"																											"\n"
+	""																											"\n"
+	"void ast_add_sibling(ast_node* sibling, ast_node* sibling_new) {"											"\n"
+	" sibling_new->nextSibling = sibling->nextSibling;"															"\n"
+	" sibling->nextSibling = sibling_new;"																		"\n"
+	"}"																											"\n"
+	""																											"\n"
+	"void ast_free(ast_node* node) {"																			"\n"
+	" if (node == NULL) return;"																				"\n"
+	" ast_free(node->firstChild);"																				"\n"
+	" ast_free(node->nextSibling);"																				"\n"
+	" free(node);"																								"\n"
+	"}"																											"\n"
+	""																											"\n"
+	"void ast_clear(ast_node* node) {"																			"\n"
+	" ast_free(node->firstChild);"																				"\n"
+	" ast_free(node->nextSibling);"																				"\n"
+	" node->firstChild = 0;"																					"\n"
+	" node->nextSibling = 0;"																					"\n"
+	"}"																											"\n"
+	""																											"\n"
 	);
 	
 //-------------------------------------------------------------------------------------------

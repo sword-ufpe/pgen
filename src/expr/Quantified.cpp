@@ -12,7 +12,7 @@
 #include <sstream>
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 //-------------------------------------------------------------------------------------------
 Quantified::Quantified(ICompilable* pExpr, unsigned int min, unsigned int max):

@@ -7,7 +7,7 @@
 
 #include "LanguageException.h"
 
-namespace pagen {
+namespace pgen {
 
 LanguageException::LanguageException(std::string& error)
  : error(error) 

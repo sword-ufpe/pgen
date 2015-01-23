@@ -11,7 +11,7 @@
 #include <sstream>
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 //-------------------------------------------------------------------------------------------
 void CharClass::add(unsigned int c) {

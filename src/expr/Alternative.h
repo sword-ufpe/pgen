@@ -15,7 +15,7 @@
 #include <memory>
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 class Alternative : public ICompilable {
 public:

@@ -12,7 +12,7 @@
 #include "ICompilable.h"
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 class Character: public ICompilable {
 private:

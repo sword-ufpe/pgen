@@ -12,7 +12,7 @@
 #include "Sequence.h"
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 //-------------------------------------------------------------------------------------------
 Sequence::Sequence() {

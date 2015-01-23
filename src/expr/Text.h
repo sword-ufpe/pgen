@@ -13,7 +13,7 @@
 
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 class Text: public ICompilable {
 private:

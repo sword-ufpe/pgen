@@ -12,7 +12,7 @@
 #ifndef TOKENTYPE_H_
 #define TOKENTYPE_H_
 
-namespace pagen { class TokenType; };
+namespace pgen { class TokenType; };
 
 // STL
 #include <string>
@@ -23,7 +23,7 @@ namespace pagen { class TokenType; };
 
 using namespace std;
  
-namespace pagen {
+namespace pgen {
 	
 	class TokenType {
 	private:

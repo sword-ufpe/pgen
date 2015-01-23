@@ -17,7 +17,7 @@
 #include "Tokenizer.h"
 
 using namespace std;
-namespace pagen {
+namespace pgen {
 
 //----------------------------------------------------------------------------------------------------------------------
 /**
@@ -50,7 +50,7 @@ int Tokenizer::getTypeId(const string& name) {
 	if (iter != typeList.end()) {
 		return iter->second->typeId;
 	}
-	return typeList.size();
+	return -1;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -81,6 +81,7 @@ void Tokenizer::add(TokenType* tokenType) {
 void Tokenizer::add(string expression, string name, int setState, int* validStates) {
 	bool discard = (name.length() > 0 && name[0] == '$');
 	int typeId = this->getTypeId(name);
+	if (typeId == -1) typeId = typeList.size();
 	TokenType *tokenType = new TokenType(language, expression, name, typeId, discard, setState, validStates);
 	this->add(tokenType);
 }
@@ -195,13 +196,15 @@ void Tokenizer::codeNumTokens(stringstream &s) {
 	s << "int " << fnNameNumTokens() << "(char* text, int len) {"	"\n"
 		 " int pos = 0;"											"\n"
 		 " int p;"													"\n"
-		 " int tok = 0;"											"\n";
+		 " int tok = 0;"											"\n"
+		 " int tokid = 0;"											"\n";
 	s << " " << language->prefix << "state = " << language->startState << ";\n"
 		 " while (pos < len) {"										"\n"
-		 "  next_token(text, &p);"									"\n"
-		 "  if (p == -1) return 0;"									"\n"
+		 "  tokid = next_token(text, &p);"							"\n"
+		 "  if (tokid == -1) return 0;"								"\n"
 		 "  text += p;"												"\n"
 		 "  pos += p;"												"\n"
+		 "  if (tokid == -2) continue;"								"\n"
 		 "  ++tok;"													"\n"
 		 " }"														"\n"
 		 " if (pos != len) return 0;"								"\n"
@@ -225,9 +228,13 @@ void Tokenizer::codeTokenizeStringLen(stringstream &s) {
 	s << " " << language->prefix << "state = " << language->startState << ";\n"
 		 " while (tokens->count < numTokens) {"						"\n"
 		 "  tokenId = next_token(text, &pos);"						"\n"
-		 "  token_list_add(tokens, tokenId, text, pos);"			"\n"
-		 "  text += pos;"											"\n"
-		 "  pos = 0;"												"\n"
+		 "  if (tokenId != -1) {"									"\n"
+		 "   if (tokenId != -2) {"									"\n"
+		 "    token_list_add(tokens, tokenId, text, pos);"			"\n"
+		 "   }"														"\n"
+		 "   text += pos;"											"\n"
+		 "   pos = 0;"												"\n"
+		 "  }"														"\n"
 		 " }"														"\n"
 		 " return tokens;"											"\n"
 		 "}"														"\n\n";

@@ -15,7 +15,7 @@
 
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 class Code {
 private:

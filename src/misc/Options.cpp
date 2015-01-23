@@ -12,7 +12,7 @@
 
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 Options::Options(int argc, char* argv[]):
 inputFileName(NULL), valid(true)

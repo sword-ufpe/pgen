@@ -66,6 +66,10 @@
       <File Name="src/parser/LLStar.h"/>
       <File Name="src/parser/LLStarRule.h"/>
       <File Name="src/parser/LLStarRule.cpp"/>
+      <File Name="src/parser/IGrammar.h"/>
+      <File Name="src/parser/IGrammarRule.h"/>
+      <File Name="src/parser/IGrammarRule.cpp"/>
+      <File Name="src/parser/IGrammar.cpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Settings Type="Executable">

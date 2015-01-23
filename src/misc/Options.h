@@ -10,7 +10,7 @@
 
 #include <string>
 
-namespace pagen {
+namespace pgen {
 
 class Options {
 public:

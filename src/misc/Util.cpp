@@ -11,7 +11,7 @@
 #include "InvalidCharacter.h"
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 unsigned int Util::strlen_utf8(const string & text) {
 	int sz = 0;
@@ -129,6 +129,16 @@ string Util::cstr(string str) {
 		s << Util::int2cstr((unsigned int) c);
 	}
 	return s.str();
+}
+
+void Util::splitSymbols(string& body, vector<string>& items, char separator) {
+	stringstream ss(body);
+    string item;
+    while (getline(ss, item, separator)) {
+        if (!item.empty()) {
+			items.push_back(item);
+		} 
+    }
 }
 
 } /* namespace pagen */

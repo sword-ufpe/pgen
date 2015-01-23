@@ -10,7 +10,7 @@
 #include <sstream>
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 vector<ICompilable*> ICompilable::_dependences;
 

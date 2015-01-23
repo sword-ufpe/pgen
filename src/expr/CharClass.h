@@ -14,7 +14,7 @@
 #include <string>
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 	class CharClass : public ICompilable {
 	private:
 		Range * range;

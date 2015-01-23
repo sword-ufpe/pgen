@@ -16,7 +16,7 @@
 #include <climits>
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 /**
  * Represents a quantified expression. The quantified expression is an expression which

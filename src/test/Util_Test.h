@@ -34,37 +34,37 @@ public:
 	}
 
 	void test_hex2int() {
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x10) == 0 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x29) == 0 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x30) == 0 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x31) == 1 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x32) == 2 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x33) == 3 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x34) == 4 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x35) == 5 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x36) == 6 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x37) == 7 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x38) == 8 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x39) == 9 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x3A) == 0 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int(0x3B) == 0 );
-		CPPUNIT_ASSERT( pagen::Util::hex2int('A') == 10);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('B') == 11);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('C') == 12);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('D') == 13);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('E') == 14);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('F') == 15);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('G') == 0);
-		CPPUNIT_ASSERT( pagen::Util::hex2int(' ') == 0);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('!') == 0);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('@') == 0);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('a') == 10);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('b') == 11);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('c') == 12);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('d') == 13);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('e') == 14);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('f') == 15);
-		CPPUNIT_ASSERT( pagen::Util::hex2int('g') == 0);
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x10) == 0 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x29) == 0 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x30) == 0 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x31) == 1 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x32) == 2 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x33) == 3 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x34) == 4 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x35) == 5 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x36) == 6 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x37) == 7 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x38) == 8 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x39) == 9 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x3A) == 0 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int(0x3B) == 0 );
+		CPPUNIT_ASSERT( pgen::Util::hex2int('A') == 10);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('B') == 11);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('C') == 12);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('D') == 13);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('E') == 14);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('F') == 15);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('G') == 0);
+		CPPUNIT_ASSERT( pgen::Util::hex2int(' ') == 0);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('!') == 0);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('@') == 0);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('a') == 10);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('b') == 11);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('c') == 12);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('d') == 13);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('e') == 14);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('f') == 15);
+		CPPUNIT_ASSERT( pgen::Util::hex2int('g') == 0);
 	}
 
 	void test_nextutf8() {
@@ -74,7 +74,7 @@ public:
 			cstr[0] = i;
 			std::string s(cstr);
 			int pos = 0;
-			CPPUNIT_ASSERT( pagen::Util::next_utf8(s, pos) == i );
+			CPPUNIT_ASSERT( pgen::Util::next_utf8(s, pos) == i );
 			CPPUNIT_ASSERT( pos == 1 );
 		}
 		// Test range u+0080 ~ u+07FF
@@ -85,7 +85,7 @@ public:
 				cstr[1] = i2;
 				int pos = 0;
 				std::string s(cstr);
-				CPPUNIT_ASSERT( pagen::Util::next_utf8(s, pos) == c );
+				CPPUNIT_ASSERT( pgen::Util::next_utf8(s, pos) == c );
 				CPPUNIT_ASSERT( pos == 2 );
 				c++;
 			}
@@ -99,7 +99,7 @@ public:
 				cstr[2] = i2;
 				int pos = 0;
 				std::string s(cstr);
-				CPPUNIT_ASSERT( pagen::Util::next_utf8(s, pos) == c );
+				CPPUNIT_ASSERT( pgen::Util::next_utf8(s, pos) == c );
 				CPPUNIT_ASSERT( pos == 3 );
 				c++;
 			}
@@ -114,7 +114,7 @@ public:
 					cstr[2] = i3;
 					int pos = 0;
 					std::string s(cstr);
-					CPPUNIT_ASSERT( pagen::Util::next_utf8(s, pos) == c );
+					CPPUNIT_ASSERT( pgen::Util::next_utf8(s, pos) == c );
 					CPPUNIT_ASSERT( pos == 3 );
 					c++;
 				}
@@ -129,7 +129,7 @@ public:
 				cstr[2] = i2;
 				int pos = 0;
 				std::string s(cstr);
-				CPPUNIT_ASSERT( pagen::Util::next_utf8(s, pos) == c );
+				CPPUNIT_ASSERT( pgen::Util::next_utf8(s, pos) == c );
 				CPPUNIT_ASSERT( pos == 3 );
 				c++;
 			}
@@ -147,7 +147,7 @@ public:
 					cstr[2] = i3;
 					int pos = 0;
 					std::string s(cstr);
-					CPPUNIT_ASSERT( pagen::Util::next_utf8(s, pos) == c );
+					CPPUNIT_ASSERT( pgen::Util::next_utf8(s, pos) == c );
 					CPPUNIT_ASSERT( pos == 3 );
 					c++;
 				}
@@ -164,7 +164,7 @@ public:
 					cstr[3] = i3;
 					int pos = 0;
 					std::string s(cstr);
-					CPPUNIT_ASSERT( pagen::Util::next_utf8(s, pos) == c );
+					CPPUNIT_ASSERT( pgen::Util::next_utf8(s, pos) == c );
 					CPPUNIT_ASSERT( pos == 4 );
 					c++;
 				}
@@ -182,7 +182,7 @@ public:
 						cstr[3] = i4;
 						int pos = 0;
 						std::string s(cstr);
-						CPPUNIT_ASSERT( pagen::Util::next_utf8(s, pos) == c );
+						CPPUNIT_ASSERT( pgen::Util::next_utf8(s, pos) == c );
 						CPPUNIT_ASSERT( pos == 4 );
 						c++;
 					}
@@ -200,7 +200,7 @@ public:
 					cstr[3] = i3;
 					int pos = 0;
 					std::string s(cstr);
-					CPPUNIT_ASSERT( pagen::Util::next_utf8(s, pos) == c );
+					CPPUNIT_ASSERT( pgen::Util::next_utf8(s, pos) == c );
 					CPPUNIT_ASSERT( pos == 4 );
 					c++;
 				}

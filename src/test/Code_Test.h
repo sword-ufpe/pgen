@@ -23,7 +23,7 @@
 #include "ICompilable_Test.h"
 
 using namespace std;
-using namespace pagen;
+using namespace pgen;
 
 /**
  * Unit Test Fixture for the "Code" class.

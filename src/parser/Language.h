@@ -11,28 +11,32 @@
 #ifndef LANGUAGE_H_
 #define LANGUAGE_H_
 
-namespace pagen { class Language; }
+namespace pgen { class Language; }
 
 // STL
 #include <string>
 #include <set>
+#include <vector>
 // Other
 #include "Tokenizer.h"
+#include "IGrammar.h"
 
 using namespace std;
  
-namespace pagen {
+namespace pgen {
 	
 	class Language {
 	public:
 		string name;				//< The language name
 		string prefix;				//< The language prefix
-		string startRule;			//< Starting rule name
 		string outputFileName;		//< The name of the output file
 		string helperFileName;		//< The name of the helper file
 		set<string> stateList;		//< The list of states
+		vector<string> ruleList;		//< The list of rules
 		int startState;				//< The initial state
+		int startRule;				//< Starting rule name
 		Tokenizer tokenizer;		//< The tokenizer object
+		IGrammar* grammar;			//< The grammar object
 		//Rule *startRule;			//< The initial rule, all other rules should be accessible from this one.
 		
 		Language();
@@ -41,6 +45,9 @@ namespace pagen {
 		void load(string fileName);
 		int getStateId(const string& name);
 		int getNonTerminalId(const string& name);
+		const string getNonTerminalName(int id);
+		int getTerminalId(const string& name);
+		string compile();
 	};
 };
  

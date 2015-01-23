@@ -10,7 +10,7 @@
 
 #include <exception>
 
-namespace pagen {
+namespace pgen {
 
 class InvalidCharacter : public std::exception {
 public:

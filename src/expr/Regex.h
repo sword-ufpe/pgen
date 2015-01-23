@@ -16,7 +16,7 @@
 
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 class Regex: public Alternative {
 private:

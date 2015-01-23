@@ -8,69 +8,60 @@
 
 // STL
 #include <sstream>
+#include <iostream>
 // Other
+#include "../misc/Util.h"
 #include "../misc/LanguageException.h"
 #include "LLStarRule.h"
  
 using namespace std;
-namespace pagen {
+namespace pgen {
 
-//----------------------------------------------------------------------------------------------------------------------
-LLStarRule::LLStarRule(Language* language, string& ruleName)
- : language(language)
- , name(ruleName)
-{
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-LLStarRule::~LLStarRule() {
-	for (auto option: options) {
-		if (option != nullptr) delete option;
+	LLStarRule::~LLStarRule() 
+	{
 	}
-}
 
-//----------------------------------------------------------------------------------------------------------------------
-void LLStarRule::addOption(string& body) {
-	vector<string> items;
-	splitSymbols(body, items);
-	if (items.size() == 0) {
-		options.push_back(nullptr);		// nullptr is equivalent to an empty rule
-	} else if (items.size() > 0) {
-		vector<int>* symbols = new vector<int>();
-		for (string symbol: items) {
-			int symbolId = language->getStateId(symbol);
-			if (symbolId != -1) {
-				symbols->push_back(symbolId);
-				continue;
+	string LLStarRule::compile() 
+	{
+		stringstream s;
+		string _funcName = this->funcname();
+		int alternativeNumber = 0;
+		s << "ast_node* " << this->funcname() << "(token_list* tokens, int *pos) {"					"\n"
+			 " int opos = *pos;"																	"\n"
+			 " ast_node* subtree = ast_new_node();"													"\n"
+			 " ast_node* child = NULL;"																"\n"
+			 " subtree->tokenId = " << language->getNonTerminalId(name) << ";"						"\n";
+		for (vector<int>* option: symbols)
+		{
+			for (unsigned int i = 0; i < option->size(); i++)
+			{
+				int symbol = option->at(i);
+				if (symbol < 1000000000) {
+					s << " if (tokens->items[*pos].type != " << symbol << ") "						"\n"
+						 "  goto " << _funcName << "_" << alternativeNumber << ";\n"
+						 " child = ast_new_node();"													"\n"
+						 " child->tokenId = " << symbol << ";"										"\n"
+						 " child->data = tokens->items[*pos].value;"								"\n"
+						 " ast_add_child(subtree, child);"											"\n"
+						 " ++(*pos);"																"\n";
+				}
+				else
+				{
+					s << " if ((child = " << language->grammar->rules[symbol-1000000000]->funcname() << "(tokens, pos)) == NULL) \n"
+						 "  goto " << _funcName << "_" << alternativeNumber << ";"					"\n"
+						 " ast_add_child(subtree, child);"											"\n";
+				}
 			}
-			symbolId = language->getNonTerminalId(symbol);
-			if (symbolId != -1) {
-				symbols->push_back(symbolId);
-				continue;
-			}
-			throw new LanguageException("Undefined symbol or token '" + symbol + "' on the rule '" + name + "'.");
+			// TODO: remove the printf and put the code that must run when matched
+			s << " return subtree;"																	"\n" <<
+				 _funcName << "_" << alternativeNumber++ << 										":\n"
+				 " *pos = opos;"																	"\n"
+				 " ast_clear(subtree);"																"\n";
 		}
-	} else {
-		throw new LanguageException("Invalid body for option of the '" + name + "' grammar rule.");
-	}	
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-void LLStarRule::splitSymbols(string& body, vector<string>& items) {
-	stringstream ss(body);
-    string item;
-    while (getline(ss, item, ' ')) {
-        if (!item.empty()) {
-			items.push_back(item);
-		} 
-    }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-string LLStarRule::compile() {
-	stringstream s;
-	// TODO
-	return s.str();
-}
+		s << " free(subtree);"																		"\n"
+			 " return NULL;"																		"\n"
+			 "}"																					"\n\n";
+		return s.str();
+	}
 
 };

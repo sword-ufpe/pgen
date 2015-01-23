@@ -9,9 +9,9 @@
 #include "parser/Parser.h"
 
 int main(int argc, char* argv[]) {
-	pagen::Options options(argc, argv);
+	pgen::Options options(argc, argv);
 	if (!options.valid) return 1;
-	pagen::Parser parser(options);
+	pgen::Parser parser(options);
 	return 0;
 }
 

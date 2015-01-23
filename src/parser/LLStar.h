@@ -10,24 +10,50 @@
 #ifndef LLSTAR_H_
 #define LLSTAR_H_
 
-namespace pagen { class LLStar; }
+namespace pgen { class LLStar; }
 
 // STL
 #include <string>
-#include <set>
+#include <vector>
 // Other
+#include <yaml-cpp/yaml.h>
+#include "IGrammar.h"
 #include "Language.h"
 
 using namespace std;
  
-namespace pagen {
+namespace pgen {
 	
-	class LLStar {
+	class LLStar : public IGrammar {
 	public:
-		Language* language;
+		/**
+		 * Name of the grammar type (parser type)
+		 */
+		static const string NAME;
 		
-		LLStar(Language* language);
+		/**
+		 * Using the IGrammar constructor.
+		 */
+		using IGrammar::IGrammar;
+		
+		/**
+		 * Virtual destructor. Currently does nothing. However the base (IGrammar) constructor is called and frees all
+		 * rules.
+		 */
 		virtual ~LLStar();
+		
+		/**
+		 * Adds a new grammar rule from a YAML node.
+		 * @param name the name of the rule
+		 * @param ruleNode the actual rule node.
+		 */
+		virtual void addRule(string &name, YAML::Node &ruleNode);
+		
+		/**
+		 * Generate C99 code that is able to parse the grammar.
+		 * @return the C99 code that is able to parse the grammar.
+		 */
+		virtual string compile();
 	};
 };
  

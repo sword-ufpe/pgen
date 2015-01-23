@@ -27,7 +27,7 @@ using namespace std;
  */
 class RangeTest : public CppUnit::TestFixture {
 private:
-	pagen::Range *single, *normal, *inverted;
+	pgen::Range *single, *normal, *inverted;
 public:
 	/**
 	 * Returns the suite of tests for this fixture.
@@ -46,9 +46,9 @@ public:
 	 * Test preparations.
 	 */
 	void setUp() {
-		single = new pagen::Range(10,10);
-		normal = new pagen::Range(100,200);
-		inverted = new pagen::Range(200,100);
+		single = new pgen::Range(10,10);
+		normal = new pgen::Range(100,200);
+		inverted = new pgen::Range(200,100);
 	}
 
 	/**
@@ -119,7 +119,7 @@ public:
 	}
 
 	void testCompile() {
-		pagen::Range *r = new pagen::Range(33,1000);
+		pgen::Range *r = new pgen::Range(33,1000);
 		ICompilableTest::compileSource(*r);
 		ICompilableTest::assert("\x20", 255,__FILE__,__LINE__); 		//32 (false)
 		ICompilableTest::assert("\x21", 1,__FILE__,__LINE__);			//33 (true)

@@ -9,9 +9,10 @@
 #define UTIL_H_
 
 #include <string>
+#include <vector>
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 class Util {
 public:
@@ -81,6 +82,14 @@ public:
 	 * \return a string containing a valid C representation of the string.
 	 */
 	static string cstr(string str);
+	
+	/**
+	 * Split a string on 'separator' and add the items to a list of items.
+	 * @param body the text to split
+	 * @param items the list to add the split items
+	 * @param separator the separator to use (only single chars are supported).
+	 */
+	static void splitSymbols(string& body, vector<string>& items, char separator);
 
 };
 

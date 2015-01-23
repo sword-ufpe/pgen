@@ -27,7 +27,7 @@ using namespace std;
  */
 class SequenceTest : public CppUnit::TestFixture {
 private:
-	pagen::Sequence *s;
+	pgen::Sequence *s;
 	string extra;
 public:
 	/**
@@ -45,9 +45,9 @@ public:
 	 * Test preparations.
 	 */
 	void setUp() {
-		s = new pagen::Sequence();
-		pagen::Character *r = new pagen::Character('r');
-		pagen::Character *e = new pagen::Character('e');
+		s = new pgen::Sequence();
+		pgen::Character *r = new pgen::Character('r');
+		pgen::Character *e = new pgen::Character('e');
 		s->add(r);
 		s->add(e);
 		stringstream ex;

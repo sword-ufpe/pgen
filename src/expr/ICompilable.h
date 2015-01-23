@@ -13,7 +13,7 @@
 #include <memory>
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 /**
  * This class defines an interface of anything that can be compiled, such as
  * Ranges, Classes, Groups and even entire expressions.

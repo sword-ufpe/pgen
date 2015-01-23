@@ -10,7 +10,7 @@
 
 #include "ICompilable.h"
 
-namespace pagen {
+namespace pgen {
 
 /**
  * This class represents a range of characters, i.e. from A to Z.

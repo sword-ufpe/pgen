@@ -24,7 +24,7 @@ using namespace std;
  */
 class CharClassTest : public CppUnit::TestFixture {
 private:
-	pagen::CharClass * il;
+	pgen::CharClass * il;
 public:
 	static CppUnit::Test * suite() {
 		CppUnit::TestSuite * s = new CppUnit::TestSuite("CharClassTest");
@@ -43,7 +43,7 @@ public:
 	}
 
 	void testAddInterval() {
-		il = new pagen::CharClass();
+		il = new pgen::CharClass();
 		CPPUNIT_ASSERT( il->range == nullptr );
 		il->add(10);
 		CPPUNIT_ASSERT( il->range != nullptr );
@@ -88,7 +88,7 @@ public:
 	}
 
 	void testInvert() {
-		il = new pagen::CharClass();
+		il = new pgen::CharClass();
 		il->add(10,20);
 		il->add(110,120);
 		il->invert();
@@ -112,7 +112,7 @@ public:
 		CPPUNIT_ASSERT(il->range->next->next == nullptr);
 		delete il;
 		// test the inversion of a class that contains all characters
-		il = new pagen::CharClass();
+		il = new pgen::CharClass();
 		il->add(0,UINT_MAX);
 		CPPUNIT_ASSERT(il->range != nullptr);
 		il->invert();
@@ -124,7 +124,7 @@ public:
 		CPPUNIT_ASSERT(il->range->end == UINT_MAX);
 		delete il;
 		// test the inversion of a class that contains only the 1 (0 gets added as 1)
-		il = new pagen::CharClass();
+		il = new pgen::CharClass();
 		il->add((unsigned int)0);
 		CPPUNIT_ASSERT(il->range != nullptr);
 		CPPUNIT_ASSERT(il->range->start == 1);
@@ -136,7 +136,7 @@ public:
 		CPPUNIT_ASSERT(il->range->next == nullptr);
 		delete il;
 		// test the inversion of a class that contains only the UINT_MAX
-		il = new pagen::CharClass();
+		il = new pgen::CharClass();
 		il->add(UINT_MAX);
 		CPPUNIT_ASSERT(il->range != nullptr);
 		CPPUNIT_ASSERT(il->range->start == UINT_MAX);
@@ -150,7 +150,7 @@ public:
 	}
 
 	void testNormalize() {
-		il = new pagen::CharClass();
+		il = new pgen::CharClass();
 		il->negated = true;
 		il->add((unsigned int)0);									// since 0 is not accepted, 1 will be added instead
 		CPPUNIT_ASSERT(il->range != nullptr);
@@ -171,11 +171,11 @@ public:
 	}
 
 	void testOperators() {
-		il = new pagen::CharClass();
-		pagen::CharClass * il_eq = new pagen::CharClass(),
-					 * il_neq1 = new pagen::CharClass(),
-					 * il_neq2 = new pagen::CharClass(),
-					 * il_neq3 = new pagen::CharClass();
+		il = new pgen::CharClass();
+		pgen::CharClass * il_eq = new pgen::CharClass(),
+					 * il_neq1 = new pgen::CharClass(),
+					 * il_neq2 = new pgen::CharClass(),
+					 * il_neq3 = new pgen::CharClass();
 		il->add(10,20);
 		il->add(30,40);
 		il_eq->add(10,20);
@@ -201,7 +201,7 @@ public:
 	}
 
 	void testCompile() {
-		il = new pagen::CharClass();
+		il = new pgen::CharClass();
 		il->add(0x20);
 		il->add(0x30,0x40);
 		ICompilableTest::compileSource(*il);
@@ -216,13 +216,13 @@ public:
 	}
 
 	void testName() {
-		il = new pagen::CharClass();
+		il = new pgen::CharClass();
 		il->add(10);
 		il->add(20,30);
 		il->add(30,40);
 		CPPUNIT_ICOMPILABLE_ASSERTNAME(*il, "cl_10_10_20_40");
 		delete il;
-		il = new pagen::CharClass();
+		il = new pgen::CharClass();
 		il->add(10,12);
 		il->add(13);
 		il->add(11);

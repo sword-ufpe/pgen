@@ -9,7 +9,7 @@
 #include <sstream>
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 //-------------------------------------------------------------------------------------------
 bool Range::in(unsigned int c) {

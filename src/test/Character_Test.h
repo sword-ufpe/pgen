@@ -50,14 +50,14 @@ public:
 
 	void testCompile() {
 		// test with the character 'r';
-		pagen::Character r('r');
+		pgen::Character r('r');
 		ICompilableTest::compileSource(r);
 		CPPUNIT_ICOMPILABLE_ASSERT("e",255);
 		CPPUNIT_ICOMPILABLE_ASSERT("",254);
 		CPPUNIT_ICOMPILABLE_ASSERT("r",1);
 		CPPUNIT_ICOMPILABLE_ASSERT("re",1);
 		// test the character 'r' chained with an 'e', i.e. it looks for the text 're'
-		pagen::Character e('e');
+		pgen::Character e('e');
 		ICompilableTest::ccompileSource(r,e.compile(),e.funcname());
 		CPPUNIT_ICOMPILABLE_ASSERT("r", 255);
 		CPPUNIT_ICOMPILABLE_ASSERT("e", 255);
@@ -68,9 +68,9 @@ public:
 	}
 
 	void testName() {
-		pagen::Character c1(1000);
-		pagen::Character c2(1234);
-		pagen::Character c3(98765);
+		pgen::Character c1(1000);
+		pgen::Character c2(1234);
+		pgen::Character c3(98765);
 		CPPUNIT_ICOMPILABLE_ASSERTNAME(c1, "ch_1000");
 		CPPUNIT_ICOMPILABLE_ASSERTNAME(c2, "ch_1234");
 		CPPUNIT_ICOMPILABLE_ASSERTNAME(c3, "ch_98765");

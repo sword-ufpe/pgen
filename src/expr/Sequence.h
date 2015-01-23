@@ -15,7 +15,7 @@
 #include "ICompilable.h"
 using namespace std;
 
-namespace pagen {
+namespace pgen {
 
 /**
  * Class that parses a chained sequence of ICompilables.

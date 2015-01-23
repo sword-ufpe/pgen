@@ -11,7 +11,7 @@
 #include <exception>
 #include <string>
 
-namespace pagen {
+namespace pgen {
 
 class RegexException: public std::exception {
 public:

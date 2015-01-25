@@ -5,13 +5,26 @@ pgen was developed in C++11.
 
 It provides a way to describe both the lexical analyzer and the syntax analyzer on a single YAML file.
 
-It is currently under development. In the near future it will accept LL(*) grammars and LALR(1) grammars.
+The parser generator is under development.
+
+Features:
+ * Integrated Lexical Analyzer Generator with UTF-8 regular expression support
+ * UTF-8 Support
+ * Recursive Descent LL(*) Parser Generator
+ * Generates C99 code
+ * Reads all lexical and syntactic definitions from a single YAML file
+ * Automatically Generates Abstract Syntax Trees
+ * Supports the definition of states for the Lexical Analyzer
 
 Dependences:
  * yaml-cpp
  * boost (for yaml-cpp)
  * cppunit (for testing)
+ * gcc (for testing)
 
-
-
+Planned (Future) Changes:
+ * More Unit Tests
+ * Documentation
+ * Benchmarking
+ * LALR(1) parser generator
 

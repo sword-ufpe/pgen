@@ -5,7 +5,7 @@ pgen was developed in C++11.
 
 It provides a way to describe both the lexical analyzer and the syntax analyzer on a single YAML file.
 
-The parser generator is under development.
+The parser generator is currently under development.
 
 Features:
  * Integrated Lexical Analyzer Generator with UTF-8 regular expression support

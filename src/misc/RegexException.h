@@ -8,21 +8,24 @@
 #ifndef REGEXEXCEPTION_H_
 #define REGEXEXCEPTION_H_
 
+// STL
 #include <exception>
 #include <string>
 
-namespace pgen {
-
-class RegexException: public std::exception {
-public:
-	std::string expression;
-	std::string reason;
-	int column;
-	RegexException(std::string expression, int column, std::string reason);
-	virtual ~RegexException() throw ();
-	virtual const char * what() const throw ();
-};
-
-} /* namespace pagen */
+using namespace std;
+namespace pgen 
+{
+	class RegexException
+	 : public std::exception 
+	{
+	public:
+		string expression;
+		string reason;
+		int column;
+		RegexException(string expression, int column, string reason);
+		virtual ~RegexException() throw ();
+		virtual const char * what() const throw ();
+	}; /* class RegexException */
+} /* namespace pgen */
 
 #endif /* REGEXEXCEPTION_H_ */

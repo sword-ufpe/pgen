@@ -14,14 +14,17 @@
  // STL
  #include <string>
  #include <vector>
- // Other
+ // pgen
  #include "IGrammarRule.h"
  #include "Language.h"
  
  using namespace std;
- namespace pgen {
+ namespace pgen 
+ {
 	 
-	class LLStarRule : public IGrammarRule {
+	class LLStarRule 
+	 : public IGrammarRule 
+	{
 	public:
 		/**
 		 * Using IGrammarRule's constructors.
@@ -38,7 +41,7 @@
 		 * @return the C99 code that is able to parse the grammar.
 		 */
 		virtual string compile();
-	};
- };
+	}; /* class LLStarRule */
+ }; /* namespace pgen */
  
  #endif /* LLSTARRULE_H_ */

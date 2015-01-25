@@ -11,14 +11,19 @@
 
 namespace pgen { class IGrammar; };
 
+// STL
 #include <vector>
+// yaml-cpp
 #include <yaml-cpp/yaml.h>
+// pgen
 #include "IGrammarRule.h"
 #include "Language.h"
 
 using namespace std;
-namespace pgen {
-	class IGrammar {
+namespace pgen 
+{
+	class IGrammar 
+	{
 	public:
 		/**
 		 * Pointer to the language object
@@ -42,18 +47,17 @@ namespace pgen {
 		 
 		/**
 		 * Adds a new grammar rule from a YAML node.
-		 * @param name the name of the rule
-		 * @param ruleNode the actual rule node.
+		 * \param name the name of the rule
+		 * \param ruleNode the actual rule node.
 		 */
 		virtual void addRule(string &name, YAML::Node &ruleNode) = 0;
 		
 		/**
 		 * Generate C99 code that is able to parse the grammar.
-		 * @return the C99 code that is able to parse the grammar.
+		 * \return the C99 code that is able to parse the grammar.
 		 */
 		virtual string compile() = 0;
-	};
-	
-};
+	}; /* class IGrammar */
+}; /* namespace pgen */
 
 #endif /* IGRAMMAR_H_ */

@@ -9,13 +9,14 @@
 // STL
 #include <sstream>
 #include <iostream>
-// Other
+// pgen
 #include "../misc/Util.h"
 #include "../misc/LanguageException.h"
 #include "LLStarRule.h"
  
 using namespace std;
-namespace pgen {
+namespace pgen 
+{
 
 	LLStarRule::~LLStarRule() 
 	{
@@ -64,4 +65,4 @@ namespace pgen {
 		return s.str();
 	}
 
-};
+}; /* namespace pgen */

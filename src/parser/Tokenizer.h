@@ -19,9 +19,11 @@ namespace pgen { class Tokenizer; };
 #include "Language.h"
 
 using namespace std;
-namespace pgen {
+namespace pgen 
+{
 	
-	class Tokenizer {
+	class Tokenizer 
+	{
 	private:
 		Language* language;							//< The language object
 		
@@ -89,7 +91,7 @@ namespace pgen {
 		 * Name of the function to get the number of tokens.
 		 */
 		const string fnNameNumTokens();
-	};
-};
+	}; /* class Tokenizer */
+}; /* namespace pgen */
 
 #endif /* TOKENIZER_H_ */

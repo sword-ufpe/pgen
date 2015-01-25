@@ -5,42 +5,54 @@
  *      Author: Dimas Melo Filho
  */
 
-#include "Options.h"
+// STL
 #include <unistd.h>
 #include <string>
 #include <iostream>
+// pgen
+#include "Options.h"
 
 using namespace std;
-
-namespace pgen {
-
-Options::Options(int argc, char* argv[]):
-inputFileName(NULL), valid(true)
+namespace pgen 
 {
-	int c;
-	while ((c = getopt(argc, argv, "i:")) != -1) {
-		switch (c) {
-		case 'i':
-			this->inputFileName = new string(optarg);
-			break;
-		case '?':
-			if (optopt == 'i') {
-				cout << "The -i option requires a parameter (the input file name)." << endl;
-			} else {
-				cout << "Unknown option '" << optopt << "'." << endl;
+
+	Options::Options(int argc, char* argv[]):
+	inputFileName(NULL), valid(true)
+	{
+		int c;
+		while ((c = getopt(argc, argv, "i:")) != -1) 
+		{
+			switch (c) 
+			{
+			case 'i':
+				this->inputFileName = new string(optarg);
+				break;
+			case '?':
+				if (optopt == 'i') 
+				{
+					cout << "The -i option requires a parameter (the input file name)." << endl;
+				} 
+				else 
+				{
+					cout << "Unknown option '" << optopt << "'." << endl;
+				}
+				this->printHelp();
 			}
-			this->printHelp();
 		}
 	}
-}
 
-Options::~Options() {
-	if (inputFileName != NULL) delete inputFileName;
-}
+	Options::~Options() 
+	{
+		if (inputFileName != NULL) 
+		{ 
+			delete inputFileName;
+		}
+	}
 
-void Options::printHelp() {
-	cout << "Use: pagen -i input_file_name" << endl;
-	this->valid = false;
-}
+	void Options::printHelp() 
+	{
+		cout << "Use: pagen -i input_file_name" << endl;
+		this->valid = false;
+	}
 
-} /* namespace pagen */
+} /* namespace pgen */

@@ -13,69 +13,78 @@
 #include <string>
 #include <vector>
 #include <sstream>
-// Other
+// pgen
 #include "TokenType.h"
 
-using namespace std;
- 
-namespace pgen {
-	
-//----------------------------------------------------------------------------------------------------------------------
-TokenType::TokenType(Language* language, string expression, string name, int typeId, bool discard, int setState, 
-	int* validStates) 
-  : regex(expression)
-  , name(name)
-  , discard(discard)
-  , typeId(typeId)
-  , setState(setState)
-  , validStates(validStates)
-  , language(language)
+using namespace std; 
+namespace pgen 
 {
-}
 
-//----------------------------------------------------------------------------------------------------------------------
-TokenType::~TokenType() {
-	if (validStates != nullptr) {
-		delete validStates;
+	TokenType::TokenType(Language* language, string expression, string name, int typeId, bool discard, int setState, 
+		int* validStates) 
+	  : regex(expression)
+	  , name(name)
+	  , discard(discard)
+	  , typeId(typeId)
+	  , setState(setState)
+	  , validStates(validStates)
+	  , language(language)
+	{
 	}
-}
 
-//----------------------------------------------------------------------------------------------------------------------
-void TokenType::matchCode(string tabs, stringstream& s) {
-	s << tabs << "*pos = " << regex.funcname() << "(text);" << endl;
-	s << tabs << "if (*pos != -1) ";
-	if (setState != -1) {
-		// Match and set a new state
-		s << "{" << endl;
-		s << tabs << "\t" << language->prefix << "state = " << setState << ";" << endl;
-		s << tabs << "\t return " << (discard? -2 : typeId) << ";" << endl;
-		s << tabs << "}" << endl;
-	} else {
-		// Only match, doesn't make any changes to the state
-		s << "return " << (discard? -2 : typeId) << ";" << endl;
-	}
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-string TokenType::code() {
-	stringstream s;
-	if (validStates != nullptr) {
-		// If the token is valid only on specific states, check states first
-		s << " if (";
-		s << language->prefix << "state == " << validStates[0];
-		int i = 1;
-		while (validStates[i] != -1) {
-			s << " || " << endl << "     " << language->prefix << "state == " << validStates[i++];
+	TokenType::~TokenType() 
+	{
+		if (validStates != nullptr) 
+		{
+			delete validStates;
 		}
-		s << ")" << endl << " {" << endl;
-		// And then match the token
-		matchCode("  ", s);
-		s << " }" << endl;
-	} else {
-		// If the token doesn't specify any valid states, match the code no matter what stat it is in
-		matchCode(" ", s);
 	}
-	return s.str();
-}
 
-};
+	void TokenType::matchCode(string tabs, stringstream& s) 
+	{
+		s << tabs << "*pos = " << regex.funcname() << "(text);" 							"\n"
+		  << tabs << "if (*pos != -1) ";
+		if (setState != -1) 
+		{
+			// Match and set a new state
+			s << "{" 																		"\n"
+			  << tabs << " " << language->prefix << "state = " << setState << ";"			"\n"
+			  << tabs << " return " << (discard? -2 : typeId) << ";" 						"\n"
+			  << tabs << "}"																"\n";
+		} 
+		else 
+		{
+			// Only match, doesn't make any changes to the state
+			s << "return " << (discard? -2 : typeId) << ";"									"\n";
+		}
+	}
+
+	string TokenType::code() 
+	{
+		stringstream s;
+		if (validStates != nullptr) 
+		{
+			// If the token is valid only on specific states, check states first
+			s << " if ("
+			  << language->prefix << "state == " << validStates[0];
+			int i = 1;
+			while (validStates[i] != -1) 
+			{
+				s << " || " 											"\n"
+					 "     " << language->prefix << "state == " << validStates[i++];
+			}
+			s << ")" 													"\n"
+				 " {"													"\n";
+			// And then match the token
+			matchCode("  ", s);
+			s << " }" << endl;
+		} 
+		else 
+		{
+			// If the token doesn't specify any valid states, match the code no matter what stat it is in
+			matchCode(" ", s);
+		}
+		return s.str();
+	}
+
+}; /* namespace pgen */

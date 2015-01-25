@@ -1,5 +1,5 @@
 /*
- * Class.h
+ * CharClass.h
  *
  *  Created on: Jun 9, 2014
  *      Author: Dimas Melo Filho
@@ -8,38 +8,40 @@
 #ifndef CHARCLASS_H_
 #define CHARCLASS_H_
 
+// STL
+#include <string>
+// pgen
 #include "Range.h"
 #include "ICompilable.h"
-#include "../test/Test.h"
-#include <string>
-using namespace std;
 
+using namespace std;
 namespace pgen {
-	class CharClass : public ICompilable {
+	class CharClass 
+	 : public ICompilable {
 	private:
 		Range * range;
 		bool negated;
 	public:
 		/**
 		 * Adds a character to the interval if it does not belong to the interval yet.
-		 * @param c unicode character to add to the interval.
-		 * @remark if two intervals need to be joined/merged, they will be.
+		 * \param c unicode character to add to the interval.
+		 * \remark if two intervals need to be joined/merged, they will be.
 		 */
 		void add(unsigned int c);
 		/**
 		 * Adds an interval of characters to the interval list. Only the characters which are not
 		 * part of any intervals are added.
-		 * @param cstart first character of the interval to add
-		 * @param cend last character of the interval to add
-		 * @remark if the interval intesercs with other intervals, they will be merged together accordingly
-		 * @remark if two intervals need to be joined/merged, they will be.
+		 * \param cstart first character of the interval to add
+		 * \param cend last character of the interval to add
+		 * \remark if the interval intesercs with other intervals, they will be merged together accordingly
+		 * \remark if two intervals need to be joined/merged, they will be.
 		 */
 		void add(unsigned int cstart, unsigned int cend);
 		/**
 		 * Adds an entire Class of Characters to this CharClass.
-		 * @param c the pointer to the charclass to add
-		 * @remark if the interval intesercs with other intervals, they will be merged together accordingly
-		 * @remark if two intervals need to be joined/merged, they will be.
+		 * \param c the pointer to the charclass to add
+		 * \remark if the interval intesercs with other intervals, they will be merged together accordingly
+		 * \remark if two intervals need to be joined/merged, they will be.
 		 */
 		void add(CharClass* c);
 		/**
@@ -47,7 +49,7 @@ namespace pgen {
 		 * i.e. If the interval intersects with the next interval, they are joined and the current
 		 * interval is deleted. This process is repeated until no intervals need to be joined
 		 * forward or backwards.
-		 * @param v Interval to join with others.
+		 * \param v Interval to join with others.
 		 */
 		void merge(Range * v);
 		/**
@@ -62,7 +64,7 @@ namespace pgen {
 		 * Compares two classes. If they aren't both negated or non-negated they are considered
 		 * different without comparing the interval. If they are either both negated or both
 		 * non-negated then their intervals are compared.
-		 * @remark In order to properly compare a negated class with a non-negated one, the negated class needs to be normalized first.
+		 * \remark In order to properly compare a negated class with a non-negated one, the negated class needs to be normalized first.
 		 */
 		bool operator==(const CharClass & c) const;
 		/**
@@ -80,7 +82,7 @@ namespace pgen {
 		 * provide an implementation of the function that accepts an extra parameter called
 		 * "chain" that is an array of function pointers (see ICompilable::cprototype() for
 		 * more info).
-		 * @return the chainable compiled C code that parses the expression.
+		 * \return the chainable compiled C code that parses the expression.
 		 */
 		virtual string ccompile();
 		/**
@@ -89,19 +91,18 @@ namespace pgen {
 		 * int expr_name(char *text);
 		 * The function must return the numbers of consumed bytes on success or -1 on failure.
 		 * This version of the function is not chainable.
-		 * @return the compiled C code that parses the expression.
+		 * \return the compiled C code that parses the expression.
 		 */
 		virtual string compile();
 		/**
 		 * Returns the name of the expression. The returned name must be usable as a function
 		 * name in the standard C (C99). i.e. it has to match the following format:
 		 * [a-zA-Z][A-Za-z0-9_]*
-		 * @return The name of the expression (usable as function names).
+		 * \return The name of the expression (usable as function names).
 		 */
 		virtual string name();
 		/**
-		 * Points to the implementation of the method of the subclass.
-		 * The method does nothing. It serves only as a pointer to identify the class.
+		 * \returns the type identifier of this class.
 		 */
 		virtual int type();
 
@@ -109,8 +110,12 @@ namespace pgen {
 
 		CharClass();
 		virtual ~CharClass();
+		
+		#ifdef _DEBUG
+		virtual void print(int level = 0);
+		#endif
 	};
 
-} /* namespace pagen */
+} /* namespace pgen */
 
 #endif /* CHARCLASS_H_ */

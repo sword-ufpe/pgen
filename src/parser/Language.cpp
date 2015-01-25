@@ -8,19 +8,24 @@
  * the initial state, the grammar, the initial grammar symbol, etc.
  */
 
+// STL
 #include <string>
 #include <sstream>
 #include <iostream>
+// yaml-cpp
 #include <yaml-cpp/yaml.h>
+// pgen
 #include "Language.h"
 #include "LLStar.h"
 #include "../misc/LanguageException.h"
 
+// DEFINITIONS
 #define ASSERT_NODE(_v,_n) \
 if (!_v) throw new LanguageException("Could not find the '" _n "' node on the YAML language specification");
 
 using namespace std; 
-namespace pgen {
+namespace pgen 
+{
 
 	Language::Language()
 	 : tokenizer(this)
@@ -47,7 +52,7 @@ namespace pgen {
 		ASSERT_NODE(node, "startRule");
 		string startRuleName = node.as<string>();	
 		node = languageNode["startState"];			// language.startState (name)
-		string startStateName = (node ? node.as<string>() : "default");	
+		this->startStateName = (node ? node.as<string>() : "default");	
 		node = languageNode["outputFile"];			// language.outputFile (name)
 		this->outputFileName = (node ? node.as<string>() : "parser.c");
 		node = languageNode["helperFile"];			// language.helperFile (name)
@@ -151,37 +156,10 @@ namespace pgen {
 			throw new LanguageException("Invalid language type '" + languageType + "'.");
 		}
 
+
 		for (int j = 0, sz = ruleNodes.size(); j< sz; j++) {
 			grammar->addRule(ruleList[j], ruleNodes[j]);
 		}
-		
-		cout << endl <<
-			"//Name: " << this->name << endl <<
-			"//Prefix: " << this->prefix << endl <<
-			"//StartRule: " << this->startRule << endl <<
-			"//StartStateName: " << startStateName << endl <<
-			"//Output File: " << this->outputFileName << endl <<
-			"//Helper File: " << this->helperFileName << endl << endl;
-			
-		cout << "//States:" << endl;
-		int i = 0;
-		for (auto state: stateList) 
-		{
-			cout << "//" << i++ << " - " << state << endl;
-		}
-		
-		cout << "// Symbol List" << endl;
-		i = 0;
-		for (auto it = tokenizer.typeList.begin(); it != tokenizer.typeList.end(); ++it) {
-			cout << "//" << i++ << " - TOKEN: " << it->first << endl;
-		}
-		i = 1000000000;
-		for (auto rule: ruleList) 
-		{
-			cout << "//" << i++ << " - RULE: " << rule << endl;
-		}
-		
-		cout << compile();
 	}
 
 	int Language::getStateId(const string& stateName) 
@@ -221,8 +199,37 @@ namespace pgen {
 		return tokenizer.getTypeId(name);
 	}
 	
-	string Language::compile() {
+	void Language::comments(stringstream &s)
+	{
+		s << endl <<
+			"// Name: " << this->name << endl <<
+			"// Prefix: " << this->prefix << endl <<
+			"// StartRule: " << this->startRule << endl <<
+			"// StartStateName: " << startStateName << endl <<
+			"// Output File: " << this->outputFileName << endl <<
+			"// Helper File: " << this->helperFileName << endl << endl;
+			
+		s << "// States:" << endl;
+		int i = 0;
+		for (auto state: stateList) 
+		{
+			s << "// " << i++ << " - " << state << endl;
+		}
+		s << "// Symbol List" << endl;
+		i = 0;
+		for (auto it = tokenizer.typeList.begin(); it != tokenizer.typeList.end(); ++it) {
+			s << "// " << i++ << " - TOKEN: " << it->first << endl;
+		}
+		i = 1000000000;
+		for (auto rule: ruleList) 
+		{
+			s << "// " << i++ << " - RULE: " << rule << endl;
+		}
+	}
+	string Language::compile() 
+	{
 		stringstream s;
+		comments(s);
 		s << "char* getSymbolName(int id) {"											"\n"
 			 " switch (id) {"															"\n";
 		for (unsigned int id = 0; id < ruleList.size(); id++) 
@@ -243,6 +250,6 @@ namespace pgen {
 		return s.str();
 	}
 	
-};
+}; /* namespace pgen */
 
 #undef ASSERT_NODE

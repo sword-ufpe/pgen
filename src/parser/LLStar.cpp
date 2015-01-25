@@ -8,15 +8,18 @@
  * These parsers don't need to parse text at all. They parse a list of tokens.
  */
  
+// STL
 #include <sstream>
 #include <string>
+// pgen
 #include "LLStar.h"
 #include "LLStarRule.h"
  
 using namespace std;
-namespace pgen {
+namespace pgen 
+{
 
-const string LLStar::NAME = "LL(*)";
+	const string LLStar::NAME = "LL(*)";
 
 	LLStar::~LLStar() 
 	{
@@ -41,4 +44,4 @@ const string LLStar::NAME = "LL(*)";
 		return s.str();
 	}
 	
-};
+}; /* namespace pgen */

@@ -15,16 +15,19 @@ namespace pgen { class LLStar; }
 // STL
 #include <string>
 #include <vector>
-// Other
+// yaml-cpp
 #include <yaml-cpp/yaml.h>
+// pgen
 #include "IGrammar.h"
 #include "Language.h"
 
-using namespace std;
- 
-namespace pgen {
+using namespace std; 
+namespace pgen 
+{
 	
-	class LLStar : public IGrammar {
+	class LLStar 
+	 : public IGrammar 
+	{
 	public:
 		/**
 		 * Name of the grammar type (parser type)
@@ -44,17 +47,17 @@ namespace pgen {
 		
 		/**
 		 * Adds a new grammar rule from a YAML node.
-		 * @param name the name of the rule
-		 * @param ruleNode the actual rule node.
+		 * \param name the name of the rule
+		 * \param ruleNode the actual rule node.
 		 */
 		virtual void addRule(string &name, YAML::Node &ruleNode);
 		
 		/**
 		 * Generate C99 code that is able to parse the grammar.
-		 * @return the C99 code that is able to parse the grammar.
+		 * \return the C99 code that is able to parse the grammar.
 		 */
 		virtual string compile();
-	};
-};
+	}; /* class LLStar */
+}; /* namespace pgen */
  
 #endif /* LLSTAR_H_ */

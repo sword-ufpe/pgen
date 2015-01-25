@@ -8,22 +8,24 @@
 #ifndef LANGUAGEEXCEPTION_H_
 #define LANGUAGEEXCEPTION_H_
 
+// STL
 #include <exception>
 #include <string>
 
-namespace pgen {
-
-class LanguageException : public std::exception {
-private:
-	std::string error;
-public:
-	LanguageException(std::string& error);
-	LanguageException(std::string error);
-	LanguageException(const char* error);
-	virtual ~LanguageException() throw ();
-	virtual const char * what() const throw ();
-};
-
-} /* namespace pagen */
+namespace pgen 
+{
+	class LanguageException 
+	 : public std::exception 
+	{
+	private:
+		std::string error;
+	public:
+		LanguageException(std::string& error);
+		LanguageException(std::string error);
+		LanguageException(const char* error);
+		virtual ~LanguageException() throw ();
+		virtual const char * what() const throw ();
+	}; /* class LanguageException */
+} /* namespace pgen */
 
 #endif /* LANGUAGEEXCEPTION_H_ */

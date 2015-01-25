@@ -17,15 +17,16 @@ namespace pgen { class TokenType; };
 // STL
 #include <string>
 #include <vector>
-// Other
+// pgen
 #include "../expr/Regex.h"
 #include "Language.h"
 
-using namespace std;
- 
-namespace pgen {
+using namespace std; 
+namespace pgen 
+{
 	
-	class TokenType {
+	class TokenType 
+	{
 	private:
 		/**
 		 * Returns the C99 code for matching this TokenType, ignoring the validStates.
@@ -72,7 +73,7 @@ namespace pgen {
 		 * Returns the code that parses this TokenType (to be used on the next_token function).
 		 */
 		string code();
-	};
-};
+	}; /* class TokenType */
+}; /* namespace pgen */
  
 #endif /* TOKENTYPE_H_ */

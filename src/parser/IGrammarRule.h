@@ -11,14 +11,20 @@
 
 namespace pgen { class IGrammarRule; };
 
+// STL
 #include <string>
 #include <vector>
+// yaml-cpp
 #include <yaml-cpp/yaml.h>
+// pgen
 #include "Language.h"
 
 using namespace std;
-namespace pgen {
-	class IGrammarRule {
+namespace pgen 
+{
+	
+	class IGrammarRule 
+	{
 	public:
 		Language* language;				//< The language of this rule
 		string name;					//< The name of this rule
@@ -44,8 +50,7 @@ namespace pgen {
 		 * @return the C99 code that is able to parse the grammar.
 		 */
 		virtual string compile() = 0;
-	};
-	
-};
+	}; /* class IGrammarRule */
+}; /* namespace pgen */
 
 #endif /* IGRAMMARRULE_H_ */

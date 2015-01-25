@@ -6,8 +6,10 @@
  * defines the methods that all grammar types must implement.
  */
 
+// STL
+#include <sstream>
+// pgen
 #include "IGrammar.h"
-#include "sstream"
 
 using namespace std;
 namespace pgen 
@@ -22,8 +24,11 @@ namespace pgen
 	{
 		for (auto rule: rules)
 		{
-			if (rule != nullptr) delete rule;
+			if (rule != nullptr) 
+			{ 
+				delete rule;
+			}
 		}
 	}
-
-};
+	
+}; /* namespace pgen */

@@ -5,20 +5,21 @@
  *      Author: Dimas Melo Filho
  */
 
+// pgen
 #include "InvalidCharacter.h"
 
 namespace pgen {
+	InvalidCharacter::InvalidCharacter() 
+	{
+	}
 
-InvalidCharacter::InvalidCharacter() {
+	InvalidCharacter::~InvalidCharacter() throw () 
+	{
+	}
 
-}
+	const char * InvalidCharacter::what() const throw () 
+	{
+		return "Invalid character";
+	}
 
-InvalidCharacter::~InvalidCharacter() throw () {
-
-}
-
-const char * InvalidCharacter::what() const throw () {
-	return "Invalid character";
-}
-
-} /* namespace pagen */
+} /* namespace pgen */

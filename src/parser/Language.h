@@ -1,6 +1,7 @@
 /**
  * \author Dimas Melo Filho
  * \date 2015-01-07
+ * \tabsize 4
  * \file
  * This file contains the declaration of the Language class. The Language handles all information regarding the
  * language. It is also responsible for processing everything related to the language such as parsing the YAML source
@@ -21,18 +22,23 @@ namespace pgen { class Language; }
 #include "Tokenizer.h"
 #include "IGrammar.h"
 
-using namespace std;
- 
-namespace pgen {
+using namespace std; 
+namespace pgen 
+{
 	
-	class Language {
+	class Language 
+	{
+	private:
+		void comments(stringstream &s);
+		
 	public:
 		string name;				//< The language name
 		string prefix;				//< The language prefix
 		string outputFileName;		//< The name of the output file
 		string helperFileName;		//< The name of the helper file
+		string startStateName;		//< The name of the initial state
 		set<string> stateList;		//< The list of states
-		vector<string> ruleList;		//< The list of rules
+		vector<string> ruleList;	//< The list of rules
 		int startState;				//< The initial state
 		int startRule;				//< Starting rule name
 		Tokenizer tokenizer;		//< The tokenizer object
@@ -48,7 +54,7 @@ namespace pgen {
 		const string getNonTerminalName(int id);
 		int getTerminalId(const string& name);
 		string compile();
-	};
-};
+	}; /* class Language */
+}; /* namespace pgen */
  
 #endif /* LANGUAGE_H_ */

@@ -1,10 +1,15 @@
-/*
- * Test.cpp
- *
- *  Created on: Jun 13, 2014
- *      Author: Dimas Melo Filho
+/**
+ * \author Dimas Melo Filho
+ * \date 2014-06-13
+ * \tabsize 4
+ * \file
+ * This is the main file of the "test" build. This file contains a main method that invokes all unit tests.
  */
 
+// CppUnit
+#include <cppunit/ui/text/TestRunner.h>
+// pgen
+#include "Test.h"
 #include "Range_Test.h"
 #include "Util_Test.h"
 #include "CharClass_Test.h"
@@ -16,21 +21,23 @@
 #include "Alternative_Test.h"
 #include "Code_Test.h"
 #include "Language_Test.h"
-#include <cppunit/ui/text/TestRunner.h>
+#include "TokenType_Test.h"
 
-int main(int argc, char* argv[]) {
+int main(int argc, char* argv[]) 
+{
 	CppUnit::TextUi::TestRunner runner;
-	runner.addTest(RangeTest::suite());
-	runner.addTest(UtilTest::suite());
-	runner.addTest(CharClassTest::suite());
-	runner.addTest(QuantifiedTest::suite());
-	runner.addTest(CharacterTest::suite());
-	runner.addTest(SequenceTest::suite());
-	runner.addTest(TextTest::suite());
-	runner.addTest(RegexTest::suite());
-	runner.addTest(AlternativeTest::suite());
-	runner.addTest(CodeTest::suite());
-	runner.addTest(LanguageTest::suite());
+	runner.addTest(pgen::RangeTest::suite());
+	runner.addTest(pgen::UtilTest::suite());
+	runner.addTest(pgen::CharClassTest::suite());
+	runner.addTest(pgen::QuantifiedTest::suite());
+	runner.addTest(pgen::CharacterTest::suite());
+	runner.addTest(pgen::SequenceTest::suite());
+	runner.addTest(pgen::TextTest::suite());
+	runner.addTest(pgen::RegexTest::suite());
+	runner.addTest(pgen::AlternativeTest::suite());
+	runner.addTest(pgen::CodeTest::suite());
+	runner.addTest(pgen::LanguageTest::suite());
+	runner.addTest(pgen::TokenTypeTest::suite());
 	runner.run();
 	return 0;
 }

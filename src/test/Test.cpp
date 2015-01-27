@@ -22,6 +22,7 @@
 #include "Code_Test.h"
 #include "Language_Test.h"
 #include "TokenType_Test.h"
+#include "LLStar_Test.h"
 
 int main(int argc, char* argv[]) 
 {
@@ -38,6 +39,7 @@ int main(int argc, char* argv[])
 	runner.addTest(pgen::CodeTest::suite());
 	runner.addTest(pgen::LanguageTest::suite());
 	runner.addTest(pgen::TokenTypeTest::suite());
+	runner.addTest(pgen::LLStarTest::suite());
 	runner.run();
 	return 0;
 }

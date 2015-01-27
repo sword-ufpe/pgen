@@ -25,6 +25,8 @@ namespace pgen
 	
 	class IGrammarRule 
 	{
+	private:
+		IGrammarRule(Language* language, string &name);
 	public:
 		Language* language;				//< The language of this rule
 		string name;					//< The name of this rule

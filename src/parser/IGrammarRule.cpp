@@ -14,6 +14,12 @@
 using namespace std;
 namespace pgen 
 {
+	IGrammarRule::IGrammarRule(Language* language, string& name)
+	 : language(language)
+	 , name(name)
+	{
+	}
+	
 	IGrammarRule::IGrammarRule(Language* language, string& name, YAML::Node &ruleNode)
 	 : language(language)
 	 , name(name)
@@ -52,11 +58,7 @@ namespace pgen
 					symbols.push_back(symSeq);
 					for (string item: items)
 					{
-						int symbolId = language->getTerminalId(item);
-						if (symbolId == -1) 
-						{ 
-							symbolId = language->getNonTerminalId(item);
-						}
+						int symbolId = language->getSymbolId(item);
 						if (symbolId == -1) 
 						{ 
 							throw new LanguageException("Unrecognized symbol: " + item);

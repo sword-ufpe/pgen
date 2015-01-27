@@ -38,9 +38,9 @@ namespace pgen
 			s << rule->compile();
 		}
 		s <<
-			"ast_node* " << language->prefix << "parse(token_list* tokens, int* pos) {"			"\n"
-			" return " << rules[language->startRule-1000000000]->funcname() << "(tokens, pos);"	"\n"
-			"}"																					"\n\n";
+			"ast_node* " << language->prefix << "parse(token_list* tokens, int* pos) {"		"\n"
+			" return ast_invert_siblings(" << rules[language->startRule-1000000000]->funcname() << "(tokens, pos), NULL);\n"
+			"}"																				"\n\n";
 		return s.str();
 	}
 	

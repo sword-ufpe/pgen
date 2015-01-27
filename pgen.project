@@ -54,6 +54,7 @@
       <File Name="src/test/Code_Test.h"/>
       <File Name="src/test/Language_Test.h"/>
       <File Name="src/test/TokenType_Test.h"/>
+      <File Name="src/test/LLStar_Test.h"/>
     </VirtualDirectory>
     <File Name="src/main.cpp" ExcludeProjConfig="Test"/>
     <VirtualDirectory Name="parser">

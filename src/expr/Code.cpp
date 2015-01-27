@@ -212,6 +212,18 @@ namespace pgen
 		" node->nextSibling = 0;"																					"\n"
 		"}"																											"\n"
 		""																											"\n"
+		"ast_node* ast_invert_siblings(ast_node* node, ast_node* newNextSibling) {"									"\n"
+		" ast_node* next;"																							"\n"
+		" while (node != 0) {"																						"\n"
+		"  node->firstChild = ast_invert_siblings(node->firstChild, NULL);"											"\n"
+		"  next = node->nextSibling;"																				"\n"
+		"  node->nextSibling = newNextSibling;"																		"\n"
+		"  newNextSibling = node;"																					"\n"
+		"  node = next;"																							"\n"
+		" }"																										"\n"
+		" return newNextSibling;"																					"\n"
+		"}"																											"\n"
+		""																											"\n"
 		);
 		
 	Code::Code() 

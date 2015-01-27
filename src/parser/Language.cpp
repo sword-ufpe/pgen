@@ -27,42 +27,29 @@ using namespace std;
 namespace pgen 
 {
 
+	/**
+	 * Language default constructor. Currently only initializes the tokenizer object.
+	 */
 	Language::Language()
 	 : tokenizer(this)
-	{	
+	{
 	}
 
+	/**
+	 * Language destructor, currently does nothing.
+	 */
 	Language::~Language()
-	{		
+	{
 	}
 	
-	void Language::load(string fileName) 
+	/**
+	 * Parse the "states" node of a YAML language definition file.
+	 * \param statesNode the YAML node loaded from the file.
+	 */
+	void Language::loadStatesNode(YAML::Node statesNode)
 	{
-		YAML::Node spec = YAML::LoadFile(fileName);
-		// Load the "language" node
-		YAML::Node languageNode = spec["language"];
-		ASSERT_NODE(languageNode, "language");	
-		YAML::Node node = languageNode["name"];		// language.name
-		ASSERT_NODE(node, "name");
-		this->name = node.as<string>();	
-		node = languageNode["prefix"];				// language.prefix
-		ASSERT_NODE(node, "prefix");
-		this->prefix = node.as<string>();	
-		node = languageNode["startRule"];			// language.startRule (name)
-		ASSERT_NODE(node, "startRule");
-		string startRuleName = node.as<string>();	
-		node = languageNode["startState"];			// language.startState (name)
-		this->startStateName = (node ? node.as<string>() : "default");	
-		node = languageNode["outputFile"];			// language.outputFile (name)
-		this->outputFileName = (node ? node.as<string>() : "parser.c");
-		node = languageNode["helperFile"];			// language.helperFile (name)
-		this->helperFileName = (node ? node.as<string>() : "parser_helper.c");
-		node = languageNode["type"];				// language.type (name)
-		string languageType = (node? node.as<string>() : "LL(*)");
-		// Load the "states" node
 		this->stateList.clear();
 		this->stateList.insert("default");
-		YAML::Node statesNode = spec["states"];
 		if (statesNode && statesNode.IsSequence())
 		{
 			for (int i = 0, sz = statesNode.size(); i < sz; i++) 
@@ -70,9 +57,49 @@ namespace pgen
 				this->stateList.insert(statesNode[i].as<string>());
 			}
 		}
-		this->startState = getStateId(startStateName);				// get the initial state id by its name
-		// Load the "tokens" node
-		YAML::Node tokensNode = spec["tokens"];
+	}
+	
+	/**
+	 * Parse the "language" node of a YAML language definition file.
+	 * \param languageNode the YAML node loaded from the file.
+	 */
+	void Language::loadLanguageNode(YAML::Node languageNode)
+	{
+		ASSERT_NODE(languageNode, "language");	
+		// language.name
+		YAML::Node node = languageNode["name"];		
+		ASSERT_NODE(node, "name");
+		this->name = node.as<string>();	
+		// language.prefix
+		node = languageNode["prefix"];
+		ASSERT_NODE(node, "prefix");
+		this->prefix = node.as<string>();	
+		// language.startRule (name)
+		node = languageNode["startRule"];			
+		ASSERT_NODE(node, "startRule");
+		this->startRuleName = node.as<string>();	
+		// language.startState (name)
+		node = languageNode["startState"];		
+		this->startStateName = (node ? node.as<string>() : "default");	
+		this->startState = getStateId(startStateName);
+		// language.outputFile (name)
+		node = languageNode["outputFile"];	
+		this->outputFileName = (node ? node.as<string>() : "parser.c");
+		// language.helperFile (name)
+		node = languageNode["helperFile"];
+		this->helperFileName = (node ? node.as<string>() : "parser_helper.c");
+		// language.type (name)
+		node = languageNode["type"];
+		this->languageType = (node? node.as<string>() : "LL(*)");
+	}
+	
+	/**
+	 * Parse the "tokens" node of a YAML language definition file.
+	 * \param tokensNode the YAML node loaded from the file.
+	 */
+	void Language::loadTokensNode(YAML::Node tokensNode)
+	{
+		YAML::Node node;
 		ASSERT_NODE(tokensNode, "tokens");
 		if (!tokensNode.IsSequence()) {
 			throw new LanguageException("The 'tokens' node needs to be a Sequence.");
@@ -122,12 +149,21 @@ namespace pgen
 				tokenizer.add(tokenRegex, tokenName, setStateId, validStatesArray);
 			}
 		}
-		// Load the "grammar" node
-		vector<YAML::Node> ruleNodes;
-		this->ruleList.clear();
-		YAML::Node grammarNode = spec["grammar"];
+	}
+	
+	/**
+	 * Parse the "grammar" node of a YAML language definition file.
+	 * \param grammarNode the YAML node loaded from the file.
+	 */
+	void Language::loadGrammarNode(YAML::Node grammarNode, vector<YAML::Node>& ruleNodes)
+	{
+		YAML::Node node;
 		ASSERT_NODE(grammarNode, "grammar");
-		if (!grammarNode.IsSequence()) throw new LanguageException("The grammar node needs to be a Sequence");
+		if (!grammarNode.IsSequence()) 
+		{ 
+			throw new LanguageException("The grammar node needs to be a Sequence");
+		}
+		this->ruleList.clear();
 		for (int j = 0, sz = grammarNode.size(); j < sz; j++) 
 		{
 			node = grammarNode[j];
@@ -143,12 +179,26 @@ namespace pgen
 				}
 			}
 		}
-		
 		this->startRule = getNonTerminalId(startRuleName);
 		if (startRule == -1)
 		{
 			throw new LanguageException("The start rule was not found: " + startRuleName);
 		}
+	}
+	
+	/**
+	 * Loads a language definition from a YAML file.
+	 * \param fileName the YAML file name.
+	 */
+	void Language::load(string fileName) 
+	{
+		vector<YAML::Node> ruleNodes;
+		YAML::Node spec = YAML::LoadFile(fileName);		
+		
+		loadStatesNode(spec["states"]);
+		loadLanguageNode(spec["language"]);
+		loadTokensNode(spec["tokens"]);
+		loadGrammarNode(spec["grammar"], ruleNodes);
 		
 		if (languageType == "LL(*)") {
 			grammar = new LLStar(this);
@@ -156,12 +206,16 @@ namespace pgen
 			throw new LanguageException("Invalid language type '" + languageType + "'.");
 		}
 
-
 		for (int j = 0, sz = ruleNodes.size(); j< sz; j++) {
 			grammar->addRule(ruleList[j], ruleNodes[j]);
 		}
 	}
-
+	
+	/**
+	 * Get the stateId of a state by its name.
+	 * \param the state name
+	 * \return the stateId when found, -1 when not found.
+	 */
 	int Language::getStateId(const string& stateName) 
 	{
 		int id = 0;
@@ -172,7 +226,30 @@ namespace pgen
 		}
 		return -1;
 	}
-
+	
+	/**
+	 * Returns the name of a non-terminal symbol by its symbolId.
+	 * \param id the symbolId to get the name of.
+	 * \return the non-terminal symbol name (when found).
+	 * \throws LanguageException "Invalid rule id" when the symbolId is not found.
+	 */
+	const string Language::getNonTerminalName(int id)
+	{
+		id -= 1000000000;
+		if (id < 0 || (unsigned int)id >= ruleList.size()) throw new LanguageException("Invalid rule id.");
+		for (string item: ruleList) {
+			if (id-- == 0) return item;
+		}
+		throw new LanguageException("Invalid rule id.");
+	}
+	
+	/**
+	 * Returns the symbolId of a non-terminal symbol.
+	 * \param name the name of a non-terminal symbol (case-sensitive).
+	 * \return the symbolId (when found), or -1 when not found.
+	 * \remark all non-terminal symbolIds are greater than 1000000000 in order to differentiate from the terminal
+	 * symbol Ids in the middle of the code.
+	 */
 	int Language::getNonTerminalId(const string& name)
 	{
 		int id = 1000000000;
@@ -183,22 +260,34 @@ namespace pgen
 		}
 		return -1;
 	}
-	
-	const string Language::getNonTerminalName(int id)
-	{
-		id -= 1000000000;
-		if (id < 0 || (unsigned int)id >= ruleList.size()) throw new LanguageException("Invalid rule id.");
-		for (string item: ruleList) {
-			if (id-- == 0) return item;
-		}
-		throw new LanguageException("Invalid rule id.");
-	}
 
+	/**
+	 * Returns the symbolId of a terminal symbol.
+	 * \param name the name of a terminal symbol (case-sensitive).
+	 * \return the symbolId (when found), or -1 when not found.
+	 */
 	int Language::getTerminalId(const string& name) 
 	{
 		return tokenizer.getTypeId(name);
 	}
 	
+	/**
+	 * Returns a symbolId, either terminal or non-terminal symbol.
+	 * \param name the name of a terminal or non-terminal symbol (case-sensitive).
+	 * \return the symbolId (when found), or -1 when not found.
+	 * \remark this method uses the getNonTerminalId and getTerminalId methods from the Language class.
+	 */
+	int Language::getSymbolId(const string& name)
+	{
+		int symbolId = getTerminalId(name);
+		if (symbolId != -1) return symbolId;
+		return getNonTerminalId(name);
+	}
+	
+	/**
+	 * Write C99 comments with information about the parser.
+	 * \param s the stringstream to write the comments to.
+	 */
 	void Language::comments(stringstream &s)
 	{
 		s << endl <<
@@ -226,6 +315,10 @@ namespace pgen
 			s << "// " << i++ << " - RULE: " << rule << endl;
 		}
 	}
+	
+	/**
+	 * \return a string containing the compiled C99 code that is able to parse the language.
+	 */
 	string Language::compile() 
 	{
 		stringstream s;
@@ -239,8 +332,9 @@ namespace pgen
 		int i = 0;
 		for (auto it = tokenizer.typeList.begin(); it != tokenizer.typeList.end(); ++it) 
 		{
-			s << "  case " << i++ << ": return \"" << it->first << "\";"					"\n";
+			s << "  case " << i++ << ": return \"" << it->first << "\";"				"\n";
 		}
+		s << "  default: return \"__INVALID_SYMBOL__\";"								"\n";
 		s << " }"																		"\n"
 			 "}"																		"\n\n";
 		s << endl << "//-------------------------------------" << endl;

@@ -43,8 +43,8 @@ namespace pgen
 		 */
 		static CppUnit::Test * suite() {
 			CppUnit::TestSuite * s = new CppUnit::TestSuite("AlternativeTest");
-			s->addTest(new CppUnit::TestCaller<AlternativeTest>("testCompile", &AlternativeTest::testCompile));
-			s->addTest(new CppUnit::TestCaller<AlternativeTest>("testName", &AlternativeTest::testName));
+			s->addTest(new CppUnit::TestCaller<AlternativeTest>("AlternativeTest::testCompile", &AlternativeTest::testCompile));
+			s->addTest(new CppUnit::TestCaller<AlternativeTest>("AlternativeTest::testName", &AlternativeTest::testName));
 			return s;
 		}
 

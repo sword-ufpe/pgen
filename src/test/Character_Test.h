@@ -38,24 +38,27 @@ namespace pgen
 		 */
 		static CppUnit::Test * suite() {
 			CppUnit::TestSuite * s = new CppUnit::TestSuite("CharacterTest");
-			s->addTest(new CppUnit::TestCaller<CharacterTest>("testCompile", &CharacterTest::testCompile));
-			s->addTest(new CppUnit::TestCaller<CharacterTest>("testName", &CharacterTest::testName));
+			s->addTest(new CppUnit::TestCaller<CharacterTest>("CharacterTest::testCompile", &CharacterTest::testCompile));
+			s->addTest(new CppUnit::TestCaller<CharacterTest>("CharacterTest::testName", &CharacterTest::testName));
 			return s;
 		}
 
 		/**
 		 * Test preparations.
 		 */
-		void setUp() {
+		void setUp() 
+		{
 		}
 
 		/**
 		 * Post-test procedures.
 		 */
-		void tearDown() {
+		void tearDown() 
+		{
 		}
 
-		void testCompile() {
+		void testCompile() 
+		{
 			// test with the character 'r';
 			Character r('r');
 			ICompilableTest::compileSource(r);
@@ -74,7 +77,8 @@ namespace pgen
 			ICompilableTest::clearFiles();
 		}
 
-		void testName() {
+		void testName() 
+		{
 			Character c1(1000);
 			Character c2(1234);
 			Character c3(98765);

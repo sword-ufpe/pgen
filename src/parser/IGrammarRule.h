@@ -48,6 +48,11 @@ namespace pgen
 		virtual string funcname();
 		
 		/**
+		 * @return the prototype of the function that parses this rule.
+		 */
+		virtual string prototype();
+		
+		/**
 		 * Generate C99 code that is able to parse the grammar.
 		 * @return the C99 code that is able to parse the grammar.
 		 */

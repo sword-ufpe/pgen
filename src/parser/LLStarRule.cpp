@@ -27,7 +27,7 @@ namespace pgen
 		stringstream s;
 		string _funcName = this->funcname();
 		int alternativeNumber = 0;
-		s << "ast_node* " << this->funcname() << "(token_list* tokens, int *pos) {"					"\n"
+		s << this->prototype() << " {"																"\n"
 			 " int opos = *pos;"																	"\n"
 			 " ast_node* subtree = ast_new_node();"													"\n"
 			 " ast_node* child = NULL;"																"\n"

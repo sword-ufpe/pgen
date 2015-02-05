@@ -23,6 +23,7 @@ namespace pgen
 	{
 	private:
 		unordered_set<string> methodList;
+		unordered_set<string> prototypeList;
 		static const string helperCode;
 		stringstream _code;
 	protected:

@@ -228,7 +228,6 @@ namespace pgen
 		
 	Code::Code() 
 	{
-		_code << helperCode;
 	}
 
 	void Code::add(ICompilable* obj) 
@@ -265,6 +264,7 @@ namespace pgen
 			// Add the method name for the object
 			_code << obj->compile();
 			methodList.insert(funcname);
+			prototypeList.insert(obj->prototype());
 		}
 	}
 
@@ -301,12 +301,20 @@ namespace pgen
 			// Add the method name for the object
 			_code << obj->ccompile();
 			methodList.insert(cfuncname);
+			prototypeList.insert(obj->cprototype());
 		}
 	}
 
 	const std::string Code::code() 
 	{
-		return _code.str();
+		stringstream s;
+		s << helperCode;
+		for (auto proto: prototypeList)
+		{
+			s << proto << ";\n";
+		}
+		s << _code.str();
+		return s.str();
 	}
 
 	const std::string & Code::helper() 

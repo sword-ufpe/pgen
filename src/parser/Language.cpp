@@ -21,7 +21,7 @@
 
 // DEFINITIONS
 #define ASSERT_NODE(_v,_n) \
-if (!_v) throw new LanguageException("Could not find the '" _n "' node on the YAML language specification");
+if (!_v) throw LanguageException("Could not find the '" _n "' node on the YAML language specification");
 
 using namespace std; 
 namespace pgen 
@@ -102,7 +102,7 @@ namespace pgen
 		YAML::Node node;
 		ASSERT_NODE(tokensNode, "tokens");
 		if (!tokensNode.IsSequence()) {
-			throw new LanguageException("The 'tokens' node needs to be a Sequence.");
+			throw LanguageException("The 'tokens' node needs to be a Sequence.");
 		}
 		for (int i = 0, sz = tokensNode.size(); i < sz; i++) 		// for each token
 		{		
@@ -161,7 +161,7 @@ namespace pgen
 		ASSERT_NODE(grammarNode, "grammar");
 		if (!grammarNode.IsSequence()) 
 		{ 
-			throw new LanguageException("The grammar node needs to be a Sequence");
+			throw LanguageException("The grammar node needs to be a Sequence");
 		}
 		this->ruleList.clear();
 		for (int j = 0, sz = grammarNode.size(); j < sz; j++) 
@@ -182,7 +182,7 @@ namespace pgen
 		this->startRule = getNonTerminalId(startRuleName);
 		if (startRule == -1)
 		{
-			throw new LanguageException("The start rule was not found: " + startRuleName);
+			throw LanguageException("The start rule was not found: " + startRuleName);
 		}
 	}
 	
@@ -203,7 +203,7 @@ namespace pgen
 		if (languageType == "LL(*)") {
 			grammar = new LLStar(this);
 		} else {
-			throw new LanguageException("Invalid language type '" + languageType + "'.");
+			throw LanguageException("Invalid language type '" + languageType + "'.");
 		}
 
 		for (int j = 0, sz = ruleNodes.size(); j< sz; j++) {
@@ -236,11 +236,11 @@ namespace pgen
 	const string Language::getNonTerminalName(int id)
 	{
 		id -= 1000000000;
-		if (id < 0 || (unsigned int)id >= ruleList.size()) throw new LanguageException("Invalid rule id.");
+		if (id < 0 || (unsigned int)id >= ruleList.size()) throw LanguageException("Invalid rule id.");
 		for (string item: ruleList) {
 			if (id-- == 0) return item;
 		}
-		throw new LanguageException("Invalid rule id.");
+		throw LanguageException("Invalid rule id.");
 	}
 	
 	/**

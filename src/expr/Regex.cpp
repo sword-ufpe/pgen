@@ -235,7 +235,7 @@ namespace pgen
 					}
 				// 2.12. If the end of stream was reached, it is an error.
 				case 0x00: case 0x03: case 0x04:
-					throw new RegexException(expression, pos, "Unexpected end of expression.");
+					throw RegexException(expression, pos, "Unexpected end of expression.");
 				// 2.13. For any other character, just use it (despite its original meaning).
 				default:
 					seqStack.push_back(new Character(c));
@@ -274,7 +274,7 @@ namespace pgen
 				} 
 				else 
 				{
-					throw new RegexException(expression, pos, "Invalid character. Expected escape hex code.");
+					throw RegexException(expression, pos, "Invalid character. Expected escape hex code.");
 				}
 				break;
 			// 5. When inside an octal escape sequence (EscapeOctal state)
@@ -291,7 +291,7 @@ namespace pgen
 				} 
 				else 
 				{
-					throw new RegexException(expression, pos, "Invalid character. Expected escape octal code.");
+					throw RegexException(expression, pos, "Invalid character. Expected escape octal code.");
 				}
 				break;
 			// 6. When beggining an explicit quantifier '{m,n}', after the first '{' was read (ExplicitQuantifier1 state)
@@ -311,7 +311,7 @@ namespace pgen
 				case '}':
 					if (seqStack.empty())
 					{
-						throw new RegexException(expression, pos, "Expected expression before quantifier '{}'");
+						throw RegexException(expression, pos, "Expected expression before quantifier '{}'");
 					}
 					top = seqStack.back();
 					seqStack.pop_back();
@@ -328,7 +328,7 @@ namespace pgen
 					break;
 				// 6.4. If any other character is read, throw an error.
 				default:
-					throw new RegexException(expression, pos, "Invalid character. Expected decimal quantifier.");
+					throw RegexException(expression, pos, "Invalid character. Expected decimal quantifier.");
 				}
 				break;
 			// 7. When reading the maximum value of an explicit quantifier  (ExplicitQuantifier2 state)
@@ -350,7 +350,7 @@ namespace pgen
 				case '}':
 					if (seqStack.empty())
 					{
-						throw new RegexException(expression, pos, "Expected expression before quantifier '{}'");
+						throw RegexException(expression, pos, "Expected expression before quantifier '{}'");
 					}
 					top = seqStack.back();
 					seqStack.pop_back();
@@ -364,7 +364,7 @@ namespace pgen
 					break;
 				// 7.3. If any other character is received, it's an error.
 				default:
-					throw new RegexException(expression, pos, "Invalid character. Expected decimal quantifier.");
+					throw RegexException(expression, pos, "Invalid character. Expected decimal quantifier.");
 				}
 				break;
 			// 8. When starting a new character class, right after the '['. (ClassFirst state)
@@ -403,6 +403,7 @@ namespace pgen
 				}
 				delete seqStack.back();
 				seqStack.pop_back();
+				state = RegexState::Class;
 				// no breaks here, intentionally
 			// 10. When in the middle of a Character Class Definition
 			case RegexState::Class:
@@ -542,7 +543,7 @@ namespace pgen
 		delete seq;
 		delete top;
 		delete charClass;
-		throw new RegexException(expression, pos, error);
+		throw RegexException(expression, pos, error);
 	#undef STATE_RETURN
 	#undef STATE_CALL
 	}

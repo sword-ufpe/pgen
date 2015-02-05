@@ -42,7 +42,7 @@ namespace pgen
 	{
 		if (!ruleNode.IsSequence()) 
 		{
-			throw new LanguageException("Expected a Sequence of rule options for rule '" + name + "'.");
+			throw LanguageException("Expected a Sequence of rule options for rule '" + name + "'.");
 		}
 		for (int i = 0, sz = ruleNode.size(); i < sz; i++) 
 		{
@@ -61,7 +61,7 @@ namespace pgen
 						int symbolId = language->getSymbolId(item);
 						if (symbolId == -1) 
 						{ 
-							throw new LanguageException("Unrecognized symbol: " + item);
+							throw LanguageException("Unrecognized symbol: " + item);
 						}
 						symSeq->push_back(symbolId);
 					}
@@ -74,6 +74,13 @@ namespace pgen
 	{
 		stringstream s;
 		s << language->prefix << "parse_" << name;
+		return s.str();
+	}
+	
+	string IGrammarRule::prototype()
+	{
+		stringstream s;
+		s << "ast_node* " << this->funcname() << "(token_list* tokens, int *pos)";
 		return s.str();
 	}
 }; /* namespace pgen */

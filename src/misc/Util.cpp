@@ -39,7 +39,7 @@ namespace pgen
 			d = text[pos++];				// 2nd byte
 			if ((d & 0x80) == 0)
 			{
-				throw new InvalidCharacter();
+				throw InvalidCharacter();
 			}
 			c |= (d & 0x3F);				// add the bits of the 2nd byte
 			return c;
@@ -51,14 +51,14 @@ namespace pgen
 			d = text[pos++];				// 2nd byte
 			if ((d & 0x80) == 0)
 			{
-				new InvalidCharacter();
+				throw InvalidCharacter();
 			}
 			c |= (d & 0x3F);				// add the bits of the 2nd byte
 			c <<= 6;
 			d = text[pos++];				// 3rd byte
 			if ((d & 0x80) == 0)
 			{
-				new InvalidCharacter();
+				throw InvalidCharacter();
 			}
 			c |= (d & 0x3F);				// add the bits of the 3rd byte
 			return c;
@@ -70,26 +70,26 @@ namespace pgen
 			d = text[pos++];				// 2nd byte
 			if ((d & 0x80) == 0)
 			{
-				new InvalidCharacter();
+				throw InvalidCharacter();
 			}
 			c |= (d & 0x3F);				// add the bits of the 2nd byte
 			c <<= 6;
 			d = text[pos++];				// 3rd byte
 			if ((d & 0x80) == 0)
 			{
-				new InvalidCharacter();
+				throw InvalidCharacter();
 			}
 			c |= (d & 0x3F);				// add the bits of the 3rd byte
 			c <<= 6;
 			d = text[pos++];				// 4th byte
 			if ((d & 0x80) == 0)
 			{
-				new InvalidCharacter();
+				throw InvalidCharacter();
 			}
 			c |= (d & 0x3F);				// add the bits of the 4th byte
 			return c;
 		}
-		throw new InvalidCharacter();
+		throw InvalidCharacter();
 	}
 
 	unsigned int Util::hex2int(unsigned int c) 

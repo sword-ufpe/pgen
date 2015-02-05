@@ -33,6 +33,10 @@ namespace pgen
 	string LLStar::compile() 
 	{
 		stringstream s;
+		for (auto rule: rules)
+		{
+			s << rule->prototype() << ";\n";
+		}
 		for (auto rule: rules) 
 		{
 			s << rule->compile();

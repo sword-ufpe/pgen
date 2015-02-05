@@ -215,7 +215,7 @@ namespace pgen
 	{
 		stringstream s;
 		s << 
-			this->prototype() << " {" 												"\n"
+			this->cprototype() << " {" 												"\n"
 			" int pos = 0, pchain = 0;"												"\n"
 			" unsigned int c = next_utf8(text, &pos);"								"\n";
 		Range * r = this->range;

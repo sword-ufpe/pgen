@@ -1,8 +1,8 @@
 .PHONY: clean All
 
 All:
-	@echo "----------Building project:[ pgen - Test ]----------"
+	@echo "----------Building project:[ pgen - Debug ]----------"
 	@$(MAKE) -f  "pgen.mk"
 clean:
-	@echo "----------Cleaning project:[ pgen - Test ]----------"
+	@echo "----------Cleaning project:[ pgen - Debug ]----------"
 	@$(MAKE) -f  "pgen.mk" clean

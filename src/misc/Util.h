@@ -41,7 +41,7 @@ namespace pgen
 		 * \remark The pos parameter tells the method what is the current position that should be read. However its value is changed within the method.
 		 * \throws std::exception when an invalid character is encountered or when reading an invalid pointer (i.e. not at the first byte of a character).
 		 */
-		static unsigned int next_utf8(const string & text, int & pos);
+		static unsigned int next_utf8(const string & text, unsigned int & pos);
 		
 		/**
 		 * Converts an utf-8 character of the class "[0-9A-Fa-f]" to its integer (base 16) value

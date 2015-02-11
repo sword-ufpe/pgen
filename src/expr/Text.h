@@ -1,8 +1,34 @@
-/*
- * Text.h
+/**
+ * pgen, Parser Generator.
+ * Copyright (C) 2015 Dimas Melo Filho
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  Created on: Oct 4, 2014
- *      Author: Dimas Melo Filho
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. 
+ * 
+ * The author can be reached by e-mail: dldmf@cin.ufpe.br.
+ * 
+ * \author Dimas Melo Filho <dldmf@cin.ufpe.br>
+ * \date 2014-10-04
+ * \file
+ * The Text class was built as an optimization to replace Sequences of Characters on Regular Expressions. For instance, 
+ * consider the following Regular expression: 'abcd'. It could be represented by a Sequence of Characters as follows:
+ *  - Sequence(Character('a'), Character('b'), Character('c'), Character('d'))
+ * 
+ * However, it could be more efficiently treated as a text string as follows:
+ *  - Text("abcd")
+ * 
+ * It is also faster to match for strings than Sequences of characters in a row in the C99 language.
  */
 
 #ifndef TEXT_H_

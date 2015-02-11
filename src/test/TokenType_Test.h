@@ -39,8 +39,8 @@ namespace pgen
 		{
 			using namespace CppUnit;
 			TestSuite * s = new TestSuite("TokenTypeTest");
-			s->addTest(new TestCaller<TokenTypeTest>("testConstructor", &TokenTypeTest::testConstructor));
-			s->addTest(new TestCaller<TokenTypeTest>("testCompile", &TokenTypeTest::testCompile));
+			s->addTest(new TestCaller<TokenTypeTest>("TokenTypeTest::testConstructor", &TokenTypeTest::testConstructor));
+			s->addTest(new TestCaller<TokenTypeTest>("TokenTypeTest::testCompile", &TokenTypeTest::testCompile));
 			return s;
 		}
 		
@@ -102,7 +102,7 @@ namespace pgen
 			c.add(&t.regex);
 			system("rm -f ___test___.c"); 								// remove source
 			ofstream o("___test___.c");
-			o << c.code() << endl << endl;
+			o << c.helper() << endl << endl << c.code() << endl << endl;
 			o << "int main(int argc, char* argv[]) {"	"\n"
 				 " int UT_state = 0;"					"\n"
 				 " int _pos = 0;"						"\n"

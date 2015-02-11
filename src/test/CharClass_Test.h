@@ -36,12 +36,13 @@ namespace pgen
 		static CppUnit::Test * suite() 
 		{
 			CppUnit::TestSuite * s = new CppUnit::TestSuite("CharClassTest");
-			s->addTest(new CppUnit::TestCaller<CharClassTest>("Test CharClass::add(s,e)", &CharClassTest::testAddInterval));
-			s->addTest(new CppUnit::TestCaller<CharClassTest>("Test CharClass::invert()", &CharClassTest::testInvert));
-			s->addTest(new CppUnit::TestCaller<CharClassTest>("Test CharClass::normalize()", &CharClassTest::testNormalize));
-			s->addTest(new CppUnit::TestCaller<CharClassTest>("Test CharClass::operator==() and CharClass::operator!=()", &CharClassTest::testOperators));
-			s->addTest(new CppUnit::TestCaller<CharClassTest>("Test CharClass::compile", &CharClassTest::testCompile));
-			s->addTest(new CppUnit::TestCaller<CharClassTest>("Test CharClass::name", &CharClassTest::testName));
+			s->addTest(new CppUnit::TestCaller<CharClassTest>("CharClass::parse(expr, pos, ncm)", &CharClassTest::testParse));
+			s->addTest(new CppUnit::TestCaller<CharClassTest>("CharClass::add(s,e)", &CharClassTest::testAddInterval));
+			s->addTest(new CppUnit::TestCaller<CharClassTest>("CharClass::invert()", &CharClassTest::testInvert));
+			s->addTest(new CppUnit::TestCaller<CharClassTest>("CharClass::normalize()", &CharClassTest::testNormalize));
+			s->addTest(new CppUnit::TestCaller<CharClassTest>("CharClass::operator==() and CharClass::operator!=()", &CharClassTest::testOperators));
+			s->addTest(new CppUnit::TestCaller<CharClassTest>("CharClass::compile", &CharClassTest::testCompile));
+			s->addTest(new CppUnit::TestCaller<CharClassTest>("CharClass::name", &CharClassTest::testName));
 			return s;
 		}
 		
@@ -51,6 +52,22 @@ namespace pgen
 
 		void tearDown() 
 		{
+		}
+		
+		void testParse()
+		{
+			il = CharClass::parse("[:alpha::number:_]");
+			Range* r = il->range;
+			CPPUNIT_ASSERT( r != nullptr );
+			CPPUNIT_ASSERT( r->prev == nullptr );
+			CPPUNIT_ASSERT( r->start == '0' );
+			CPPUNIT_ASSERT( r->end == '9' );
+			r = r->next;
+			CPPUNIT_ASSERT( r != nullptr );
+			CPPUNIT_ASSERT( r->start == 'A' );
+			CPPUNIT_ASSERT( r->end == 'Z' );
+			r = r->next;
+			CPPUNIT_ASSERT( r != nullptr );
 		}
 
 		void testAddInterval() 
@@ -212,7 +229,6 @@ namespace pgen
 			delete il_neq1;
 			delete il_neq2;
 			delete il_neq3;
-
 		}
 
 		void testCompile() 

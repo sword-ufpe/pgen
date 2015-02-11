@@ -36,7 +36,9 @@
       <File Name="src/expr/Text.h"/>
       <File Name="src/expr/Code.h"/>
       <File Name="src/expr/Code.cpp"/>
-      <File Name="src/expr/_DIRINFO"/>
+      <File Name="src/expr/RegexEscape.h"/>
+      <File Name="src/expr/RegexEscape.cpp"/>
+      <File Name="src/expr/RegexState.h"/>
     </VirtualDirectory>
     <VirtualDirectory Name="test">
       <File Name="src/test/Character_Test.h"/>
@@ -72,6 +74,8 @@
       <File Name="src/parser/IGrammarRule.h"/>
       <File Name="src/parser/IGrammarRule.cpp"/>
       <File Name="src/parser/IGrammar.cpp"/>
+      <File Name="src/parser/NamedClassManager.h"/>
+      <File Name="src/parser/NamedClassManager.cpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <Dependencies Name="Debug"/>
@@ -96,7 +100,7 @@
         <Library Value="yaml-cpp"/>
       </Linker>
       <ResourceCompiler Options="" Required="no"/>
-      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./build/debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./build/debug" Command="./$(ProjectName)" CommandArguments="-i owl2.yaml" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes" IsGUIProgram="no" IsEnabled="yes"/>
       <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
         <![CDATA[]]>
       </Environment>

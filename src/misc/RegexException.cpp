@@ -7,6 +7,7 @@
 
 // STL
 #include <string>
+#include <sstream>
 // pgen
 #include "RegexException.h"
 
@@ -27,7 +28,9 @@ namespace pgen
 
 	const char * RegexException::what() const throw () 
 	{
-		return "Error while parsing a regular expression.";
+		stringstream s;
+		s << "Error while parsing a regular expression: " << reason << " ('" << expression << "':" << column << ")";
+		return s.str().c_str();
 	}
 
 } /* namespace pgen */

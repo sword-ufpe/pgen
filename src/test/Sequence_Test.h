@@ -42,9 +42,9 @@ namespace pgen
 		static CppUnit::Test * suite() 
 		{
 			CppUnit::TestSuite * suite = new CppUnit::TestSuite("SequenceTest");
-			suite->addTest(new CppUnit::TestCaller<SequenceTest>("testAdd", &SequenceTest::testAdd));
-			suite->addTest(new CppUnit::TestCaller<SequenceTest>("testCompile", &SequenceTest::testCompile));
-			suite->addTest(new CppUnit::TestCaller<SequenceTest>("testName", &SequenceTest::testName));
+			suite->addTest(new CppUnit::TestCaller<SequenceTest>("SequenceTest::testAdd", &SequenceTest::testAdd));
+			suite->addTest(new CppUnit::TestCaller<SequenceTest>("SequenceTest::testCompile", &SequenceTest::testCompile));
+			suite->addTest(new CppUnit::TestCaller<SequenceTest>("SequenceTest::testName", &SequenceTest::testName));
 			return suite;
 		}
 

@@ -23,6 +23,7 @@
 #include "../parser/LLStarRule.h"
 #include "../parser/LLStar.h"
 #include "../parser/Language.h"
+#include "../expr/Code.h"
 
 using namespace std;
 namespace pgen
@@ -103,7 +104,7 @@ namespace pgen
 		{
 			system("rm -f ___test___.c"); 								// remove source
 			ofstream o("___test___.c");
-			o << lang->compile() << endl << flush <<
+			o << Code::helperCode << endl << lang->compile() << endl << flush <<
 				 "int compare_tree(ast_node* ast, char** rep) {"			"\n"
 				 " int type = 0;"											"\n"
 				 " if (ast == 0) return (**rep == 0 || **rep == ')');"		"\n"

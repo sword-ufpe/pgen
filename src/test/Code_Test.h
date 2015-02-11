@@ -20,6 +20,7 @@
 // Used Objects
 #include "../expr/Code.h"
 #include "../expr/Regex.h"
+#include "../parser/NamedClassManager.h"
 #include "ICompilable_Test.h"
 
 using namespace std;
@@ -42,7 +43,7 @@ namespace pgen
 		static CppUnit::Test * suite() 
 		{
 			CppUnit::TestSuite * s = new CppUnit::TestSuite("CodeTest");
-			s->addTest(new CppUnit::TestCaller<CodeTest>("testCompile", &CodeTest::testCompile));
+			s->addTest(new CppUnit::TestCaller<CodeTest>("CodeTest::testCompile", &CodeTest::testCompile));
 			return s;
 		}
 
@@ -51,10 +52,11 @@ namespace pgen
 		 */
 		void setUp() 
 		{
-			Regex regex("(a?b+c*|[d-f])+|[^a-z]+");
+			NamedClassManager ncm;
+			Regex regex("(a?b+c*|[d-f])+|[^a-z]+", ncm);
 			code.add(&regex);
 			ofstream o("___test___.c");
-			o << code.code() << endl;
+			o << code.helper() << endl << endl << code.code() << endl;
 			o << "int main(int argc, char* argv[]) {" << endl;
 			o << " char* buffer = NULL;" << endl;
 			o << " FILE *f;" << endl;

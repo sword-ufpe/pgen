@@ -18,13 +18,13 @@ namespace pgen
 
 	unsigned int Util::strlen_utf8(const string & text) 
 	{
-		int sz = 0;
+		unsigned int sz = 0;
 		while (Util::next_utf8(text, sz) != 0);
 		sz--;
 		return sz >= 0 ? sz : 0;
 	}
 
-	unsigned int Util::next_utf8(const string & text, int & pos) 
+	unsigned int Util::next_utf8(const string & text, unsigned int & pos) 
 	{
 		register unsigned int c, d;			// character buffer
 		c = text[pos++];					// read the leading element (first byte)

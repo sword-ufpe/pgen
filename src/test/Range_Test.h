@@ -41,11 +41,11 @@ namespace pgen
 		 */
 		static CppUnit::Test * suite() {
 			CppUnit::TestSuite * s = new CppUnit::TestSuite("RangeTest");
-			s->addTest(new CppUnit::TestCaller<RangeTest>("testSingle", &RangeTest::testSingle));
-			s->addTest(new CppUnit::TestCaller<RangeTest>("testNormal", &RangeTest::testNormal));
-			s->addTest(new CppUnit::TestCaller<RangeTest>("testInverted", &RangeTest::testInverted));
-			s->addTest(new CppUnit::TestCaller<RangeTest>("testCompile", &RangeTest::testCompile));
-			s->addTest(new CppUnit::TestCaller<RangeTest>("testName", &RangeTest::testName));
+			s->addTest(new CppUnit::TestCaller<RangeTest>("RangeTest::testSingle", &RangeTest::testSingle));
+			s->addTest(new CppUnit::TestCaller<RangeTest>("RangeTest::testNormal", &RangeTest::testNormal));
+			s->addTest(new CppUnit::TestCaller<RangeTest>("RangeTest::testInverted", &RangeTest::testInverted));
+			s->addTest(new CppUnit::TestCaller<RangeTest>("RangeTest::testCompile", &RangeTest::testCompile));
+			s->addTest(new CppUnit::TestCaller<RangeTest>("RangeTest::testName", &RangeTest::testName));
 			return s;
 		}
 

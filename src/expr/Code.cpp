@@ -1,8 +1,30 @@
-/*
- * Code.cpp
+/**
+ * pgen, Parser Generator.
+ * Copyright (C) 2015 Dimas Melo Filho
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  Created on: Jun 7, 2014
- *      Author: Dimas Melo Filho
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. 
+ * 
+ * The author can be reached by e-mail: dldmf@cin.ufpe.br.
+ * 
+ * \author Dimas Melo Filho <dldmf@cin.ufpe.br>
+ * \date 2014-07-07
+ * \file
+ * This is the most different class from this directory. Its main function is to provide a way to compile many regular 
+ * expressions into a single file, while removing the redundant expressions. That is, the code for a single expression 
+ * will not be added twice to the compiled file.
+ * It also provides the helper code that is needed by many of the compiled functions.
  */
 
 // STL
@@ -308,7 +330,6 @@ namespace pgen
 	const std::string Code::code() 
 	{
 		stringstream s;
-		s << helperCode;
 		for (auto proto: prototypeList)
 		{
 			s << proto << ";\n";

@@ -1,9 +1,38 @@
-/*
- * CharClass.h
+/**
+ * pgen, Parser Generator.
+ * Copyright (C) 2015 Dimas Melo Filho
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  Created on: Jun 9, 2014
- *      Author: Dimas Melo Filho
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. 
+ * 
+ * The author can be reached by e-mail: dldmf@cin.ufpe.br.
+ * 
+ * \author Dimas Melo Filho <dldmf@cin.ufpe.br>
+ * \date 2014-07-09
+ * \file
+ * This file declares an ICompilable that handles all the logic behind a Regular Expression Class of Characters.
+ * It provides methods both for parsing regular expressions and for generating C code.
+ * The CharClass represents a class of characters that can be matched on a position of the Regular Expression. For 
+ * instance, if someone uses the following regular expression '[0-9A-F]', it will be encoded using this class. The 
+ * CharClass is also able to parse classes that contain other named classes such as '[:alpha:]'. If the named class is 
+ * not a standard POSIX class, it must be declared on the YAML file first.
  */
+ 
+namespace pgen
+{
+	class CharClass;
+}
 
 #ifndef CHARCLASS_H_
 #define CHARCLASS_H_
@@ -13,6 +42,7 @@
 // pgen
 #include "Range.h"
 #include "ICompilable.h"
+#include "../parser/NamedClassManager.h"
 
 using namespace std;
 namespace pgen {
@@ -22,6 +52,26 @@ namespace pgen {
 		Range * range;
 		bool negated;
 	public:
+		/**
+		 * \brief returns a CharClass that matches all characters
+		 * \return a CharClass pointer that matches all characters.
+		 */
+		static CharClass* dot();
+		/**
+		 * Parses the regular expression definition of the name of a class inside a class definition. i.e.
+		 * When something like [:alpha:] is found, it parses the name :alpha: and returns only 'alpha'.
+		 * \param expression the regular expression to parse
+		 * \param pos the position to start parsing.
+		 * \return string the parsed name of a regex class.
+		 */
+		static string parseClassName(string &expression, unsigned int& pos);
+		/**
+		 * Parses a regular expression class definiton.
+		 * \param expression the regular expression
+		 * \param pos the index of the next character to read on the regular expression
+		 * \return CharClass the parsed class.
+		 */
+		static CharClass* parse(string& expression, unsigned int& pos, NamedClassManager& ncm);
 		/**
 		 * Adds a character to the interval if it does not belong to the interval yet.
 		 * \param c unicode character to add to the interval.
@@ -37,6 +87,13 @@ namespace pgen {
 		 * \remark if two intervals need to be joined/merged, they will be.
 		 */
 		void add(unsigned int cstart, unsigned int cend);
+		/**
+		 * Adds an entire Class of Characters to this CharClass.
+		 * @param c the reference to the charclass to add
+		 * \remark if the interval intesercs with other intervals, they will be merged together accordingly
+		 * \remark if two intervals need to be joined/merged, they will be.
+		 */
+		void add(const CharClass& c);
 		/**
 		 * Adds an entire Class of Characters to this CharClass.
 		 * \param c the pointer to the charclass to add
@@ -109,6 +166,7 @@ namespace pgen {
 		static const int TYPE = 3;
 
 		CharClass();
+		CharClass(const CharClass& c);
 		virtual ~CharClass();
 		
 		#ifdef _DEBUG

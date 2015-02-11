@@ -1,4 +1,23 @@
 /**
+ * pgen, Parser Generator.
+ * Copyright (C) 2015 Dimas Melo Filho
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. 
+ * 
+ * The author can be reached by e-mail: dldmf@cin.ufpe.br.
+ * 
  * \author Dimas Melo Filho
  * \date 2015-01-07
  * \tabsize 4
@@ -9,8 +28,8 @@
  * the initial state, the grammar, the initial grammar symbol, etc.
  */
  
-#ifndef LANGUAGE_H_
-#define LANGUAGE_H_
+#ifndef PGEN_PARSER_LANGUAGE_H_
+#define PGEN_PARSER_LANGUAGE_H_
 
 namespace pgen { class Language; }
 
@@ -23,6 +42,7 @@ namespace pgen { class Language; }
 // Other
 #include "Tokenizer.h"
 #include "IGrammar.h"
+#include "NamedClassManager.h"
 
 using namespace std; 
 namespace pgen 
@@ -51,6 +71,7 @@ namespace pgen
 		int startRule;				//< Starting rule name
 		Tokenizer tokenizer;		//< The tokenizer object
 		IGrammar* grammar;			//< The grammar object
+		NamedClassManager ncm;		//< The named class manager object
 		
 		/**
 		 * Language default constructor. Currently only initializes the tokenizer object.
@@ -73,6 +94,12 @@ namespace pgen
 		 * \param languageNode the YAML node loaded from the file.
 		 */
 		void loadLanguageNode(YAML::Node languageNode);
+		
+		/**
+		 * Parse the "classes" node of a YAML language definition file.
+		 * @param tokensNode the YAML node loaded from the file.
+		 */
+		void loadClassesNode(YAML::Node classesNode);
 		
 		/**
 		 * Parse the "tokens" node of a YAML language definition file.
@@ -132,10 +159,23 @@ namespace pgen
 		int getSymbolId(const string& name);
 		
 		/**
-		 * \return a string containing the compiled C99 code that is able to parse the language.
+		 * Writes comments to the beggining of the stream containing the symbol identifiers.
+		 * \param s the stream to write to.
 		 */
-		string compile();
+		void compileComments(ostream &s);
+		
+		/**
+		 * writes the GetSymbolName function to the stream
+		 * \param s the stream to write to.
+		 */
+		void compileGetSymbolName(ostream& s);
+		
+		/**
+		 * writes the compiled C99 code that is able to parse the language to a stream
+		 * \param s the stream to write to.
+		 */
+		void compile(ostream& s);
 	}; /* class Language */
 }; /* namespace pgen */
  
-#endif /* LANGUAGE_H_ */
+#endif /* PGEN_PARSER_LANGUAGE_H_ */

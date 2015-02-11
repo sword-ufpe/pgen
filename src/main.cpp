@@ -32,6 +32,7 @@
 #include "misc/Options.h"
 #include "parser/Language.h"
 #include "misc/LanguageException.h"
+#include "expr/Code.h"
 
 int main(int argc, char* argv[]) 
 {
@@ -50,7 +51,10 @@ int main(int argc, char* argv[])
 		cout << "LanguageException: " << ex.what() << endl;
 		return 1;
 	}
-	cout << language.compile();
+	language.compileComments(cout);
+	language.compileGetSymbolName(cout);
+	cout << pgen::Code::getHelper() << endl << endl;
+	language.compile(cout);
 	return 0;
 }
 

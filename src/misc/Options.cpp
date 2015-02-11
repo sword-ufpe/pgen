@@ -40,15 +40,22 @@ namespace pgen
 		{"input",	required_argument,	0,	'i'},
 		{"version",	no_argument,		0,	0},
 		{"warranty",no_argument,		0,	0},
+		{"output",  required_argument,	0,	'o'},
+		{"defs",	required_argument,	0,	'd'},
+		{"symbol-name", no_argument,	0,	'n'},
 		{0,			0,					0,	0}
 	};
 	
-	Options::Options(int argc, char* argv[]):
-	inputFileName(nullptr), valid(true)
+	Options::Options(int argc, char* argv[])
+	 : inputFileName(nullptr)
+	 , outputFileName(nullptr)
+	 , definitionFileName(nullptr)
+	 , writeGetSymbolNameMethod(false)
+	 , valid(true)
 	{
 		int c;
 		int opt_index;
-		while ((c = getopt_long(argc, argv, "i:h", long_options, &opt_index)) != -1) 
+		while ((c = getopt_long(argc, argv, "i:ho:d:n", long_options, &opt_index)) != -1) 
 		{
 			switch (c) 
 			{
@@ -69,6 +76,15 @@ namespace pgen
 			case 'h': // help
 				this->printHelp();
 				return;
+			case 'o': // output
+				this->outputFileName = new string(optarg);
+				break;
+			case 'd': // definition file (header)
+				this->definitionFileName = new string(optarg);
+				break;
+			case 'n': // write the function "getSymbolName" that returns a string for each name.
+				this->writeGetSymbolNameMethod = true;
+				break;				
 			case '?': // something is wrong
 				if (optopt == 'i') 
 				{
@@ -103,6 +119,9 @@ namespace pgen
 		"Options:\n"
 		"  -h, --help              display this help information.\n"
 		"  -i, --input=FILENAME    use the provided input file.\n"
+		"  -o, --output=FILENAME   write the generated code to this file.\n"
+		"  -d, --defs=FILENAME	   write the definitions to this file.\n"
+		"  -n, --symbol-name       write the getSymbolName method.\n"
 		"      --version           display the program's version information.\n\n";		
 		this->valid = false;
 	}

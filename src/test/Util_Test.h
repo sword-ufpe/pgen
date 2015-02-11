@@ -30,8 +30,8 @@ namespace pgen
 		static CppUnit::Test * suite() 
 		{
 			CppUnit::TestSuite * s = new CppUnit::TestSuite("IntervalTest");
-			s->addTest(new CppUnit::TestCaller<UtilTest>("test Util::hex2int", &UtilTest::test_hex2int));
-			s->addTest(new CppUnit::TestCaller<UtilTest>("test Util::next_utf8", &UtilTest::test_nextutf8));
+			s->addTest(new CppUnit::TestCaller<UtilTest>("Util::hex2int", &UtilTest::test_hex2int));
+			s->addTest(new CppUnit::TestCaller<UtilTest>("Util::next_utf8", &UtilTest::test_nextutf8));
 			return s;
 		}
 		void setUp() 
@@ -85,7 +85,7 @@ namespace pgen
 			{
 				cstr[0] = i;
 				string s(cstr);
-				int pos = 0;
+				unsigned int pos = 0;
 				CPPUNIT_ASSERT( Util::next_utf8(s, pos) == i );
 				CPPUNIT_ASSERT( pos == 1 );
 			}
@@ -97,7 +97,7 @@ namespace pgen
 				for (unsigned char i2 = 0x80; i2 <= 0xBF; i2++) 
 				{
 					cstr[1] = i2;
-					int pos = 0;
+					unsigned int pos = 0;
 					string s(cstr);
 					CPPUNIT_ASSERT( Util::next_utf8(s, pos) == c );
 					CPPUNIT_ASSERT( pos == 2 );
@@ -113,7 +113,7 @@ namespace pgen
 				for (unsigned char i2 = 0x80; i2 <= 0xBF; i2++) 
 				{
 					cstr[2] = i2;
-					int pos = 0;
+					unsigned int pos = 0;
 					string s(cstr);
 					CPPUNIT_ASSERT( Util::next_utf8(s, pos) == c );
 					CPPUNIT_ASSERT( pos == 3 );
@@ -131,7 +131,7 @@ namespace pgen
 					for (unsigned char i3 = 0x80; i3 <= 0xBF; i3++) 
 					{
 						cstr[2] = i3;
-						int pos = 0;
+						unsigned int pos = 0;
 						string s(cstr);
 						CPPUNIT_ASSERT( Util::next_utf8(s, pos) == c );
 						CPPUNIT_ASSERT( pos == 3 );
@@ -148,7 +148,7 @@ namespace pgen
 				for (unsigned char i2 = 0x80; i2 <= 0xBF; i2++) 
 				{
 					cstr[2] = i2;
-					int pos = 0;
+					unsigned int pos = 0;
 					string s(cstr);
 					CPPUNIT_ASSERT( Util::next_utf8(s, pos) == c );
 					CPPUNIT_ASSERT( pos == 3 );
@@ -169,7 +169,7 @@ namespace pgen
 					for (unsigned char i3 = 0x80; i3 <= 0xBF; i3++) 
 					{
 						cstr[2] = i3;
-						int pos = 0;
+						unsigned int pos = 0;
 						string s(cstr);
 						CPPUNIT_ASSERT( Util::next_utf8(s, pos) == c );
 						CPPUNIT_ASSERT( pos == 3 );
@@ -189,7 +189,7 @@ namespace pgen
 					for (unsigned char i3 = 0x80; i3 <= 0xBF; i3++) 
 					{
 						cstr[3] = i3;
-						int pos = 0;
+						unsigned int pos = 0;
 						string s(cstr);
 						CPPUNIT_ASSERT( Util::next_utf8(s, pos) == c );
 						CPPUNIT_ASSERT( pos == 4 );
@@ -211,7 +211,7 @@ namespace pgen
 						for (unsigned char i4 = 0x80; i4 <= 0xBF; i4++) 
 						{
 							cstr[3] = i4;
-							int pos = 0;
+							unsigned int pos = 0;
 							string s(cstr);
 							CPPUNIT_ASSERT( Util::next_utf8(s, pos) == c );
 							CPPUNIT_ASSERT( pos == 4 );
@@ -232,7 +232,7 @@ namespace pgen
 					for (unsigned char i3 = 0x80; i3 <= 0xBF; i3++) 
 					{
 						cstr[3] = i3;
-						int pos = 0;
+						unsigned int pos = 0;
 						string s(cstr);
 						CPPUNIT_ASSERT( Util::next_utf8(s, pos) == c );
 						CPPUNIT_ASSERT( pos == 4 );

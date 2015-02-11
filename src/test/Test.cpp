@@ -7,6 +7,9 @@
  */
 
 // CppUnit
+#include <cppunit/TestResult.h>
+#include <cppunit/TestResultCollector.h>
+#include <cppunit/BriefTestProgressListener.h>
 #include <cppunit/ui/text/TestRunner.h>
 // pgen
 #include "Test.h"
@@ -26,6 +29,11 @@
 
 int main(int argc, char* argv[]) 
 {
+	CppUnit::TestResult controller;
+	CppUnit::TestResultCollector result;
+	controller.addListener(&result);
+	CppUnit::BriefTestProgressListener progressListener;
+	controller.addListener(&progressListener);
 	CppUnit::TextUi::TestRunner runner;
 	runner.addTest(pgen::RangeTest::suite());
 	runner.addTest(pgen::UtilTest::suite());
@@ -40,6 +48,6 @@ int main(int argc, char* argv[])
 	runner.addTest(pgen::LanguageTest::suite());
 	runner.addTest(pgen::TokenTypeTest::suite());
 	runner.addTest(pgen::LLStarTest::suite());
-	runner.run();
+	runner.run(controller);
 	return 0;
 }

@@ -19,37 +19,34 @@
  * The author can be reached by e-mail: dldmf@cin.ufpe.br.
  * 
  * \author Dimas Melo Filho <dldmf@cin.ufpe.br>
- * \date 2015-02-04
+ * \date 2015-02-08
  * \file
- * This file contains the definition of the Options class, which is responsible for parsing command line options and
- * displaying help information to the user.
+ * This file contains the RegexEscape class definition. The class contains a method to parse regular expression escape
+ * sequences and return the correct ICompilable object for the escape sequence.
  */
 
-#ifndef OPTIONS_H_
-#define OPTIONS_H_
+#ifndef PGEN_EXPR_REGEXESCAPE_H_
+#define PGEN_EXPR_REGEXESCAPE_H_
 
-#include <getopt.h>
+// STL
 #include <string>
+// pgen
+#include "ICompilable.h"
 
-namespace pgen 
+using namespace std;
+namespace pgen
 {
-	class Options 
+	class RegexEscape
 	{
 	private:
-	static struct option long_options[];
+		static ICompilable* digitsClass();
+		static ICompilable* spacesClass();
+		static ICompilable* nonSpacesClass();
+		static ICompilable* Hex(string& expression, unsigned int& pos, int len);
+		static ICompilable* Octal(string& expression, unsigned int& pos, int len);
 	public:
-		std::string* inputFileName;
-		std::string* outputFileName;
-		std::string* definitionFileName;
-		bool writeGetSymbolNameMethod;
-		bool valid;
-		Options(int argc, char* argv[]);
-		virtual ~Options();
+		static ICompilable* parse(string& text, unsigned int& pos);
+	};
+}
 
-		void printHelp();
-		void printVersion();
-		void printWarranty();
-	}; /* class Options */
-} /* namespace pgen */
-
-#endif /* OPTIONS_H_ */
+#endif /* PGEN_EXPR_REGEXESCAPE_H_ */

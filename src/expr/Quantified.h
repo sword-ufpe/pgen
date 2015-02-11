@@ -1,8 +1,44 @@
-/*
- * Quantified.h
+/**
+ * pgen, Parser Generator.
+ * Copyright (C) 2015 Dimas Melo Filho
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- *  Created on: Jun 18, 2014
- *      Author: Dimas Melo Filho
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. 
+ * 
+ * The author can be reached by e-mail: dldmf@cin.ufpe.br.
+ * 
+ * \author Dimas Melo Filho <dldmf@cin.ufpe.br>
+ * \date 2014-06-18
+ * \file
+ * The Quantified class represents a quantified expression on the Regular Expression. It has the following parameters: 
+ * minimum numbers of characters, maximum number of characters, greediness. The Regular Expression's quantifiers are 
+ * encoded as follows:
+ * 		EXPR		MIN			MAX			GREEDY
+ * 		'a*'		0			INFINITE	YES
+ * 		'a+'		1			INFINITE	YES
+ * 		'a?'		0			1			YES
+ * 		'a{m}'		m			m			YES
+ * 		'a{m,}'		m			INFINITE	YES
+ * 		'a{,n}'		0			n			YES
+ * 		'a{m,n}'	m			n			YES
+ * 		'a*?'		0			INFINITE	NO
+ * 		'a+?'		1			INFINITE	NO
+ * 		'a??'		0			1			NO
+ * 		'a{m}?'		m			m			NO
+ * 		'a{m,}?'	m			INFINITE	NO
+ * 		'a{,n}?'	0			n			NO
+ * 		'a{m,n}?'	m			n			NO
  */
 
 #ifndef QUANTIFIED_H_

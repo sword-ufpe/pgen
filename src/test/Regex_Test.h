@@ -25,6 +25,7 @@
 #include "../expr/Quantified.h"
 #include "../expr/CharClass.h"
 #include "../expr/Code.h"
+#include "../parser/NamedClassManager.h"
 #include "ICompilable_Test.h"
 
 using namespace std;
@@ -43,7 +44,7 @@ namespace pgen
 		static CppUnit::Test * suite() 
 		{
 			CppUnit::TestSuite * s = new CppUnit::TestSuite("RegexTest");
-			s->addTest(new CppUnit::TestCaller<RegexTest>("testParse", &RegexTest::testParse));
+			s->addTest(new CppUnit::TestCaller<RegexTest>("RegexTest::testParse", &RegexTest::testParse));
 			return s;
 		}
 
@@ -63,7 +64,8 @@ namespace pgen
 		
 		void testParse() 
 		{
-			Regex re1("renata");
+			NamedClassManager ncm;
+			Regex re1("renata", ncm);
 			CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected number of objects on the regex.", 1, (int)re1.expr.size());
 			int expected = Sequence::TYPE;
 			CPPUNIT_ASSERT_EQUAL_MESSAGE("The regex object must contain a Sequence.", expected, re1.expr[0]->type());
@@ -78,7 +80,7 @@ namespace pgen
 				CPPUNIT_ASSERT_EQUAL_MESSAGE("Wrong character value on the regex sequence", (unsigned int)("renata"[i]), c->getChar());
 			}
 			
-			Regex re2("a?b+c*d??e+?f*?(ghi|jkl){2,4}|[mno][^p-s]+\n");
+			Regex re2("a?b+c*d??e+?f*?(ghi|jkl){2,4}|[mno][^p-s]+\n", ncm);
 			CPPUNIT_ASSERT_EQUAL_MESSAGE("Unexpected number of objects on the regex.", 2, (int)re2.expr.size());
 			expected = Sequence::TYPE;
 			CPPUNIT_ASSERT_EQUAL_MESSAGE("The regex object must contain two Sequences.", expected, re2.expr[0]->type());

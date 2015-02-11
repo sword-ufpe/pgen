@@ -19,37 +19,22 @@
  * The author can be reached by e-mail: dldmf@cin.ufpe.br.
  * 
  * \author Dimas Melo Filho <dldmf@cin.ufpe.br>
- * \date 2015-02-04
+ * \date 2015-02-08
  * \file
- * This file contains the definition of the Options class, which is responsible for parsing command line options and
- * displaying help information to the user.
+ * This file contains the RegexState enumeration.
  */
 
-#ifndef OPTIONS_H_
-#define OPTIONS_H_
+#ifndef PGEN_EXPR_REGEXSTATE_H_
+#define PGEN_EXPR_REGEXSTATE_H_
 
-#include <getopt.h>
-#include <string>
-
-namespace pgen 
+namespace pgen
 {
-	class Options 
+	enum RegexState 
 	{
-	private:
-	static struct option long_options[];
-	public:
-		std::string* inputFileName;
-		std::string* outputFileName;
-		std::string* definitionFileName;
-		bool writeGetSymbolNameMethod;
-		bool valid;
-		Options(int argc, char* argv[]);
-		virtual ~Options();
+		MakeAlternative,		// State used when mounting a sequence of an alternative
+		ExplicitQuantifier1,	// Reading the first number of the explicit quantifier
+		ExplicitQuantifier2,	// Reading the second number of the explicit quantifier
+	}; /* enum RegexState */
+}
 
-		void printHelp();
-		void printVersion();
-		void printWarranty();
-	}; /* class Options */
-} /* namespace pgen */
-
-#endif /* OPTIONS_H_ */
+#endif

@@ -1,4 +1,23 @@
 /**
+ * pgen, Parser Generator.
+ * Copyright (C) 2015 Dimas Melo Filho
+ * 
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA. 
+ * 
+ * The author can be reached by e-mail: dldmf@cin.ufpe.br.
+ * 
  * \author Dimas Melo Filho
  * \date 2015-01-07
  * \file
@@ -82,15 +101,33 @@ namespace pgen
 		node = languageNode["startState"];		
 		this->startStateName = (node ? node.as<string>() : "default");	
 		this->startState = getStateId(startStateName);
-		// language.outputFile (name)
-		node = languageNode["outputFile"];	
-		this->outputFileName = (node ? node.as<string>() : "parser.c");
-		// language.helperFile (name)
-		node = languageNode["helperFile"];
-		this->helperFileName = (node ? node.as<string>() : "parser_helper.c");
 		// language.type (name)
 		node = languageNode["type"];
 		this->languageType = (node? node.as<string>() : "LL(*)");
+	}
+	
+	/**
+	 * Parse the "classes" node of the YAML language definition file.
+	 * \param classesNode The YAML classes node.
+	 */
+	void Language::loadClassesNode(YAML::Node classesNode)
+	{
+		YAML::Node node, cdef;
+		string className, classExpr;
+		if (classesNode && classesNode.IsSequence())
+		{
+			for (int i = 0, sz = classesNode.size(); i < sz; ++i) 
+			{
+				cdef = classesNode[i];
+				node = cdef["name"];
+				ASSERT_NODE(node, "name");
+				className = node.as<string>();
+				node = cdef["regex"];
+				ASSERT_NODE(node, "regex");
+				classExpr = node.as<string>();
+				ncm.add(className, classExpr);
+			}
+		}
 	}
 	
 	/**
@@ -196,6 +233,7 @@ namespace pgen
 		YAML::Node spec = YAML::LoadFile(fileName);		
 		
 		loadStatesNode(spec["states"]);
+		loadClassesNode(spec["classes"]);
 		loadLanguageNode(spec["language"]);
 		loadTokensNode(spec["tokens"]);
 		loadGrammarNode(spec["grammar"], ruleNodes);
@@ -288,7 +326,7 @@ namespace pgen
 	 * Write C99 comments with information about the parser.
 	 * \param s the stringstream to write the comments to.
 	 */
-	void Language::comments(stringstream &s)
+	void Language::compileComments(ostream& s)
 	{
 		s << endl <<
 			"// Name: " << this->name << endl <<
@@ -305,9 +343,8 @@ namespace pgen
 			s << "// " << i++ << " - " << state << endl;
 		}
 		s << "// Symbol List" << endl;
-		i = 0;
 		for (auto it = tokenizer.typeList.begin(); it != tokenizer.typeList.end(); ++it) {
-			s << "// " << i++ << " - TOKEN: " << it->first << endl;
+			s << "// " << it->second->typeId << " - TOKEN: " << it->first << endl;
 		}
 		i = 1000000000;
 		for (auto rule: ruleList) 
@@ -316,32 +353,32 @@ namespace pgen
 		}
 	}
 	
-	/**
-	 * \return a string containing the compiled C99 code that is able to parse the language.
-	 */
-	string Language::compile() 
+	void Language::compileGetSymbolName(ostream& s)
 	{
-		stringstream s;
-		comments(s);
 		s << "char* getSymbolName(int id) {"											"\n"
 			 " switch (id) {"															"\n";
 		for (unsigned int id = 0; id < ruleList.size(); id++) 
 		{
 			s << "  case " << (id+1000000000) << ": return \"" << ruleList[id] << "\";" "\n";
 		}
-		int i = 0;
 		for (auto it = tokenizer.typeList.begin(); it != tokenizer.typeList.end(); ++it) 
 		{
-			s << "  case " << i++ << ": return \"" << it->first << "\";"				"\n";
+			s << "  case " << it->second->typeId << ": return \"" << it->first << "\";"	"\n";
 		}
 		s << "  default: return \"__INVALID_SYMBOL__\";"								"\n";
 		s << " }"																		"\n"
 			 "}"																		"\n\n";
+	}
+	
+	/**
+	 * \return a string containing the compiled C99 code that is able to parse the language.
+	 */
+	void Language::compile(ostream& s) 
+	{
 		s << endl << "//-------------------------------------" << endl;
 		s << tokenizer.code();
 		s << endl << "//-------------------------------------" << endl;
 		s << grammar->compile();
-		return s.str();
 	}
 	
 }; /* namespace pgen */

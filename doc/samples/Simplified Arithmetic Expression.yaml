@@ -4,8 +4,6 @@ language:
   prefix: AX_
   startRule: expression
   startState: normal
-  outputFile: ax.c
-  helperFile: ax_helper.c
   type: 'LL(*)'
 
 # ----------------------------------------------------------------------------------------------------------------------

@@ -9,6 +9,7 @@ The parser generator is currently under development.
 
 Features:
  * Integrated Lexical Analyzer Generator with UTF-8 regular expression support
+ * Supports the definition of custom named regular expression classes
  * UTF-8 Support
  * Recursive Descent LL(*) Parser Generator
  * Generates C99 code

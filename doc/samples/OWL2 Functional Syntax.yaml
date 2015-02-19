@@ -343,8 +343,7 @@ grammar:
     - FULLIRI            
     - ''              
   - versionIRI:            
-    - FULLIRI            
-    - ''              
+    - FULLIRI        
   - directlyImportsDocuments:    
     - IMPORT LPAR IRI RPAR directlyImportsDocuments
     - IMPORT LPAR IRI RPAR    

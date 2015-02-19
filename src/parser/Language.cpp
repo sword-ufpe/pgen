@@ -34,6 +34,7 @@
 // yaml-cpp
 #include <yaml-cpp/yaml.h>
 // pgen
+#include "../expr/Code.h"
 #include "Language.h"
 #include "LLStar.h"
 #include "../misc/LanguageException.h"
@@ -101,6 +102,10 @@ namespace pgen
 		node = languageNode["startState"];		
 		this->startStateName = (node ? node.as<string>() : "default");	
 		this->startState = getStateId(startStateName);
+		if (this->startState < 0)
+		{
+			throw LanguageException("The starting state name is invalid '" + startStateName + "'.");
+		}
 		// language.type (name)
 		node = languageNode["type"];
 		this->languageType = (node? node.as<string>() : "LL(*)");
@@ -379,6 +384,30 @@ namespace pgen
 		s << tokenizer.code();
 		s << endl << "//-------------------------------------" << endl;
 		s << grammar->compile();
+	}
+	
+	/**
+	 * writes the compiled C99 header that contains all definitions needed by the external code.
+	 */
+	void Language::compileHeader(ostream& s)
+	{
+		s << "#ifndef __" << this->prefix << "_H"										"\n"
+			 "#define __" << this->prefix << "_H"										"\n\n"
+		  << Code::getHeader() << 														"\n"
+			 "ast_node* " << this->prefix << "parse_file(char* fileName);"				"\n"
+			 "ast_node* " << this->prefix << "parse_string(char* buffer);"				"\n\n";
+		for (unsigned int id = 0; id < ruleList.size(); id++) 
+		{
+			s << "#define " << this->prefix << ruleList[id] << " " << (id+1000000000)<<"\n";
+		}
+		for (auto it = tokenizer.typeList.begin(); it != tokenizer.typeList.end(); ++it) 
+		{
+			if (it->first[0] != '$')
+			{
+				s << "#define " << this->prefix << it->first << " " << it->second->typeId<<"\n";
+			}
+		}
+		s << "#endif /* __" << this->prefix << "_H */"									"\n";
 	}
 	
 }; /* namespace pgen */

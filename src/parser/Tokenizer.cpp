@@ -130,7 +130,9 @@ namespace pgen
 	 */
 	void Tokenizer::codeGlobals(stringstream &s) 
 	{
-		s << "int " << language->prefix << "state = " << language->startState << ";\n\n";
+		s << "int " << language->prefix << "state = " << language->startState << ";"	"\n"
+			 "int " << language->prefix << "inv_token_pos = -1;"						"\n"
+			 "char " << language->prefix << "inv_token_txt[200];"						"\n\n";
 	}
 
 	/**
@@ -176,7 +178,7 @@ namespace pgen
 	 */
 	void Tokenizer::codeNextToken(stringstream &s) 
 	{
-		s << "int next_token(char* text, int* pos) {"	"\n";
+		s << "int next_token(char* text, int* pos) {"			"\n";
 		for (int i = 0, sz = typeList.size(); i < sz; i++) {
 			for (auto kv: typeList) {
 				if (kv.second->typeId == i) {
@@ -185,8 +187,9 @@ namespace pgen
 				}
 			}
 		}
-		s << " return -1;"								"\n"
-			 "}"										"\n\n";
+		s << " strncpy(" << language->prefix << "inv_token_txt, text, 200);"		"\n"
+			 " return -1;"															"\n"
+			 "}"																	"\n\n";
 	}
 
 	/**
@@ -203,11 +206,14 @@ namespace pgen
 			 " int pos = 0;"											"\n"
 			 " int p;"													"\n"
 			 " int tok = 0;"											"\n"
-			 " int tokid = 0;"											"\n";
-		s << " " << language->prefix << "state = " << language->startState << ";\n"
+			 " int tokid = 0;"											"\n"
+			 " " << language->prefix << "state = " << language->startState << ";\n"
 			 " while (pos < len) {"										"\n"
 			 "  tokid = next_token(text, &p);"							"\n"
-			 "  if (tokid == -1) return 0;"								"\n"
+			 "  if (tokid == -1) {"										"\n"
+			 "   " << language->prefix << "inv_token_pos = pos;"		"\n"
+			 "   return 0;"												"\n"
+			 "  }"														"\n"
 			 "  text += p;"												"\n"
 			 "  pos += p;"												"\n"
 			 "  if (tokid == -2) continue;"								"\n"
@@ -227,11 +233,12 @@ namespace pgen
 		s << "token_list* " << fnNameTokenizeStringLen() << "(char* text, int len) {\n"
 			 " int pos = 0;"											"\n"
 			 " int tokenId;"											"\n"
-			 " token_list* tokens;"										"\n";
-		s << " int numTokens = " << fnNameNumTokens() << "(text, len);"	"\n"
+			 " token_list* tokens;"										"\n"
+			 " int numTokens = " << fnNameNumTokens() << "(text, len);"	"\n"
 			 " if (numTokens <= 0) return NULL;"						"\n"
-			 " tokens = token_list_init(numTokens, len);"				"\n";
-		s << " " << language->prefix << "state = " << language->startState << ";\n"
+			 " " << language->prefix << "inv_token_pos = -1;"			"\n"
+			 " tokens = token_list_init(numTokens, len);"				"\n"
+			 " " << language->prefix << "state = " << language->startState << ";\n"
 			 " while (tokens->count < numTokens) {"						"\n"
 			 "  tokenId = next_token(text, &pos);"						"\n"
 			 "  if (tokenId != -1) {"									"\n"

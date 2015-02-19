@@ -26,6 +26,7 @@
 
 // STL
 #include <iostream>
+#include <fstream>
 // yaml-cpp
 #include <yaml-cpp/yaml.h>
 // pgen
@@ -33,6 +34,8 @@
 #include "parser/Language.h"
 #include "misc/LanguageException.h"
 #include "expr/Code.h"
+
+using namespace std;
 
 int main(int argc, char* argv[]) 
 {
@@ -51,10 +54,18 @@ int main(int argc, char* argv[])
 		cout << "LanguageException: " << ex.what() << endl;
 		return 1;
 	}
-	language.compileComments(cout);
-	language.compileGetSymbolName(cout);
-	cout << pgen::Code::getHelper() << endl << endl;
-	language.compile(cout);
+	
+	ofstream output(*options.outputFileName + ".c");
+	output << "#include \"" << *options.outputFileName << ".h\"\n\n";
+	language.compileComments(output);
+	language.compileGetSymbolName(output);
+	output << pgen::Code::getHelper() << endl << endl;
+	language.compile(output);
+	output.close();
+	output.open(*options.outputFileName + ".h");
+	language.compileHeader(output);
+	output.close();
+	
 	return 0;
 }
 

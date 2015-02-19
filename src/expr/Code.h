@@ -47,6 +47,7 @@ namespace pgen
 		unordered_set<string> methodList;
 		unordered_set<string> prototypeList;
 		static const string helperCode;
+		static const string headerCode;
 		stringstream _code;
 	protected:
 
@@ -91,6 +92,7 @@ namespace pgen
 		 */
 		const string & helper();
 		static const string & getHelper();
+		static const string & getHeader();
 	}; /* class Code */
 } /* namespace pgen */
 

@@ -52,7 +52,7 @@ namespace pgen
 				string ruleExpr = node.as<string>();
 				vector<string> items;
 				Util::splitSymbols(ruleExpr, items, ' ');
-				if (items.size() > 0)
+				if (items.size() >= 0)
 				{
 					vector<int>* symSeq = new vector<int>();
 					symbols.push_back(symSeq);

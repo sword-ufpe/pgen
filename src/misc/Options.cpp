@@ -98,7 +98,7 @@ namespace pgen
 				return;
 			}
 		}
-		if (this->inputFileName == nullptr)
+		if (this->inputFileName == nullptr || this->outputFileName == nullptr)
 		{
 			this->printHelp();
 		}
@@ -115,11 +115,11 @@ namespace pgen
 	void Options::printHelp() 
 	{
 		cout << 
-		"Usage: pgen -i <input_file> [options]\n"
+		"Usage: pgen -i <input_file> -o <output_prefix> [options]\n"
 		"Options:\n"
 		"  -h, --help              display this help information.\n"
 		"  -i, --input=FILENAME    use the provided input file.\n"
-		"  -o, --output=FILENAME   write the generated code to this file.\n"
+		"  -o, --output=PREFIX     write the generated code PREFIX.c and PREFIX.h.\n"
 		"  -d, --defs=FILENAME	   write the definitions to this file.\n"
 		"  -n, --symbol-name       write the getSymbolName method.\n"
 		"      --version           display the program's version information.\n\n";		

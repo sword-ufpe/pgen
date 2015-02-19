@@ -43,7 +43,21 @@
 
 namespace pgen 
 {
-
+	const string Code::headerCode(
+		"typedef struct _ast_node {"																				"\n"
+		" int tokenId;"																								"\n"
+		" char* data;"																								"\n"
+		" struct _ast_node* nextSibling;"																			"\n"
+		" struct _ast_node* firstChild;"																			"\n"
+		"} ast_node;"																								"\n"
+		""																											"\n"
+		"ast_node* ast_new_node();"																					"\n"
+		"void ast_add_child(ast_node* parent, ast_node* child);"													"\n"
+		"void ast_add_sibling(ast_node* sibling, ast_node* sibling_new);"											"\n"
+		"void ast_free(ast_node* node);"																			"\n"
+		"void ast_clear(ast_node* node);"																			"\n"
+		"ast_node* ast_invert_siblings(ast_node* node, ast_node* newNextSibling);"									"\n"
+	);
 	const string Code::helperCode(
 		"#include <stdlib.h>"																						"\n"
 		"#include <stdio.h>"																						"\n"
@@ -194,13 +208,6 @@ namespace pgen
 		"	) \\"																									"\n"
 		")"																											"\n"
 		""																											"\n"
-		"typedef struct _ast_node {"																				"\n"
-		" int tokenId;"																								"\n"
-		" char* data;"																								"\n"
-		" struct _ast_node* nextSibling;"																			"\n"
-		" struct _ast_node* firstChild;"																			"\n"
-		"} ast_node;"																								"\n"
-		""																											"\n"
 		"ast_node* ast_new_node() {"																				"\n"
 		" ast_node* node = (ast_node*)malloc(sizeof(ast_node));"													"\n"
 		" node->tokenId = -1;"																						"\n"
@@ -346,6 +353,11 @@ namespace pgen
 	const std::string & Code::getHelper() 
 	{
 		return Code::helperCode;
+	}
+	
+	const std::string & Code::getHeader()
+	{
+		return Code::headerCode;
 	}
 
 }; /* namespace pgen */

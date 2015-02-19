@@ -175,6 +175,11 @@ namespace pgen
 		 * \param s the stream to write to.
 		 */
 		void compile(ostream& s);
+		
+		/**
+		 * writes the compiled C99 header that contains all definitions needed by the external code.
+		 */
+		void compileHeader(ostream& s);
 	}; /* class Language */
 }; /* namespace pgen */
  

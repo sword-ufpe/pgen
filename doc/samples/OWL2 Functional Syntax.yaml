@@ -483,9 +483,9 @@ grammar:
   - DisjointClasses:        
     - DISJOINTCLASSES LPAR axiomAnnotations ClassExpression ClassExpression ClassExpressionList RPAR 
   - DisjointUnion:        
-    - DISJOINTUNION LPAR axiomAnnotations Class disjointClassExpressions 
+    - DISJOINTUNION LPAR axiomAnnotations Class disjointClassExpressions RPAR
   - SubObjectPropertyOf: 
-    - SUBOBJECTPROPERTYOF LPAR axiomAnnotations subObjectPropertyExpression superObjectPropertyExpression 
+    - SUBOBJECTPROPERTYOF LPAR axiomAnnotations subObjectPropertyExpression superObjectPropertyExpression RPAR
   - EquivalentObjectProperties: 
     - EQUIVALENTOBJECTPROPERTIES LPAR axiomAnnotations ObjectPropertyExpression ObjectPropertyExpression ObjectPropertyExpressionList RPAR 
   - DisjointObjectProperties: 

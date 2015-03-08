@@ -177,6 +177,12 @@ namespace pgen
 		void compile(ostream& s);
 		
 		/**
+		 * writes the code for the parse_string and parse_file helpers.
+		 * @param s the stream to write to.
+		 */
+		void compileParseHelpers(ostream& s);
+		
+		/**
 		 * writes the compiled C99 header that contains all definitions needed by the external code.
 		 */
 		void compileHeader(ostream& s);

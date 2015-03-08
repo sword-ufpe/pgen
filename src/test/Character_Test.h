@@ -61,14 +61,14 @@ namespace pgen
 		{
 			// test with the character 'r';
 			Character r('r');
-			ICompilableTest::compileSource(r);
+			ICompilableTest::compileSource(r, pgen::Code::getHeader());
 			CPPUNIT_ICOMPILABLE_ASSERT("e",255);
 			CPPUNIT_ICOMPILABLE_ASSERT("",254);
 			CPPUNIT_ICOMPILABLE_ASSERT("r",1);
 			CPPUNIT_ICOMPILABLE_ASSERT("re",1);
 			// test the character 'r' chained with an 'e', i.e. it looks for the text 're'
 			Character e('e');
-			ICompilableTest::ccompileSource(r,e.compile(),e.funcname());
+			ICompilableTest::ccompileSource(r, pgen::Code::getHeader(), e.compile(), e.funcname());
 			CPPUNIT_ICOMPILABLE_ASSERT("r", 255);
 			CPPUNIT_ICOMPILABLE_ASSERT("e", 255);
 			CPPUNIT_ICOMPILABLE_ASSERT("re", 2);

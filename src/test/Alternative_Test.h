@@ -79,7 +79,7 @@ namespace pgen
 		}
 
 		void testCompile() {		
-			ICompilableTest::compileSource(alt, ss.str());
+			ICompilableTest::compileSource(alt, Code::getHeader(), ss.str());
 			CPPUNIT_ICOMPILABLE_ASSERT("re",2);
 			CPPUNIT_ICOMPILABLE_ASSERT("r",255);
 			CPPUNIT_ICOMPILABLE_ASSERT("e",255);

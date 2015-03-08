@@ -56,7 +56,7 @@ namespace pgen
 			Regex regex("(a?b+c*|[d-f])+|[^a-z]+", ncm);
 			code.add(&regex);
 			ofstream o("___test___.c");
-			o << code.helper() << endl << endl << code.code() << endl;
+			o << code.getHeader() << endl << code.helper() << endl << endl << code.code() << endl;
 			o << "int main(int argc, char* argv[]) {" << endl;
 			o << " char* buffer = NULL;" << endl;
 			o << " FILE *f;" << endl;

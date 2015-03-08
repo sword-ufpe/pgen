@@ -133,7 +133,7 @@ namespace pgen
 		void testCompile() 
 		{
 			Range *r = new Range(33,1000);
-			ICompilableTest::compileSource(*r);
+			ICompilableTest::compileSource(*r, pgen::Code::getHeader());
 			ICompilableTest::assert("\x20", 255,__FILE__,__LINE__); 		//32 (false)
 			ICompilableTest::assert("\x21", 1,__FILE__,__LINE__);			//33 (true)
 			ICompilableTest::assert("\xCF\xA8",2,__FILE__,__LINE__);		//1000 (true)

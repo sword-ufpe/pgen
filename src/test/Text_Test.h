@@ -61,17 +61,17 @@ namespace pgen
 		{
 			// test with the text "text"
 			Text text("text");
-			ICompilableTest::compileSource(text);
+			ICompilableTest::compileSource(text, pgen::Code::getHeader());
 			CPPUNIT_ICOMPILABLE_ASSERT("taxt", 255);
 			CPPUNIT_ICOMPILABLE_ASSERT("text", 4);
 			// test the text "\a\b\t\n\v\f\r\"\'\\"
 			Text escape("\a\b\t\n\v\f\r\"\'\\");
-			ICompilableTest::compileSource(escape);
+			ICompilableTest::compileSource(escape, pgen::Code::getHeader());
 			CPPUNIT_ICOMPILABLE_ASSERT("\a\b\t\n\v\f\r\"\'\\", 10);
 			CPPUNIT_ICOMPILABLE_ASSERT("\x07\x08\x09\x0A\x0B\x0C\x0D\x22\x27\x5C", 10);
 			CPPUNIT_ICOMPILABLE_ASSERT("abtnvfr\"'\\", 255);
 			Text special("\x01\x02\x03\x04\x05\x06");
-			ICompilableTest::compileSource(special);
+			ICompilableTest::compileSource(special, pgen::Code::getHeader());
 			CPPUNIT_ICOMPILABLE_ASSERT("\x01\x02\x03\x04\x05\x06", 6);
 			CPPUNIT_ICOMPILABLE_ASSERT("123456", 255);
 			ICompilableTest::clearFiles();

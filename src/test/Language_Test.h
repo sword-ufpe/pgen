@@ -84,7 +84,7 @@ namespace pgen
 		void testCompile() 
 		{		
 			Language language;
-			language.load("test.yaml");
+			//language.load("test.yaml");
 			//ICompilableTest::clearFiles();
 		}
 

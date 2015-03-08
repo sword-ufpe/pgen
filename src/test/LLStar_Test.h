@@ -104,7 +104,9 @@ namespace pgen
 		{
 			system("rm -f ___test___.c"); 								// remove source
 			ofstream o("___test___.c");
-			o << Code::helperCode << endl << lang->compile() << endl << flush <<
+			o << Code::getHeader() << endl << Code::helperCode << endl;
+			lang->compile(o);
+			o << endl << flush <<
 				 "int compare_tree(ast_node* ast, char** rep) {"			"\n"
 				 " int type = 0;"											"\n"
 				 " if (ast == 0) return (**rep == 0 || **rep == ')');"		"\n"

@@ -103,27 +103,6 @@ namespace pgen
 	}
 
 	/**
-	 * Write the structs needed by the tokenizer.
-	 * It currently needs the token struct which consists of a int type and a value pointer. And also a token_list 
-	 * structure which consists of token struct items, a pointer to the global data section used by the structure for 
-	 * all data of all tokens, a count of tokens and a data_ptr which tells the current pointer at the data structure.
-	 * \param stringstream the stringstream to write to
-	 */
-	void Tokenizer::codeStructs(stringstream& s) 
-	{
-		s << "typedef struct _token {"		"\n"
-			 " int type;"					"\n"
-			 " char* value;"				"\n"
-			 "} token;"						"\n"
-			 "typedef struct _token_list {"	"\n"
-			 " token* items;"				"\n"
-			 " char* data;"					"\n"
-			 " int count;"					"\n"
-			 " char* data_ptr;"				"\n"
-			 "} token_list;"				"\n\n";
-	}
-
-	/**
 	 * Write the globals needed by the tokenizer.
 	 * Currently only one global is used, a "state" global, which keeps the current state of the tokenizer.
 	 * \param stringstream the stringstream to write to
@@ -133,43 +112,6 @@ namespace pgen
 		s << "int " << language->prefix << "state = " << language->startState << ";"	"\n"
 			 "int " << language->prefix << "inv_token_pos = -1;"						"\n"
 			 "char " << language->prefix << "inv_token_txt[200];"						"\n\n";
-	}
-
-	/**
-	 * Write the helper functions needed by the token_list structure.
-	 * Currently there are three methods:
-	 * 1. token_list_init, which initializes the list, allocating memory and other stuff.
-	 * 2. The token_list_free which frees all allocated memory from the list.
-	 * 3. token_list_add, which adds a token to the token list.
-	 * \param stringstream the stringstream to write to
-	 */
-	void Tokenizer::codeTokenListHelper(stringstream &s) 
-	{
-		// token_list_init(int num_tokens, int data_len)
-		s << "token_list* token_list_init(int num_tokens, int data_len) {"      "\n"
-			 " token_list* tokens = (token_list*) malloc(sizeof(token_list));"  "\n"
-			 " tokens->items = (token*) malloc(num_tokens * sizeof(token));"    "\n"
-			 " tokens->data = (char*) malloc(data_len + num_tokens);"           "\n"	// data_len + space for num_token times 0x00
-			 " tokens->data_ptr = tokens->data;"                                "\n"
-			 " tokens->count = 0;"                                              "\n"
-			 " return tokens;"													"\n"
-			 "}\n\n"
-			 // Add the token_list_free(token_list* tokens)
-			 "void token_list_free(token_list* tokens) {"                       "\n"
-			 " free(tokens->items);"                                            "\n"
-			 " free(tokens->data);"                                             "\n"
-			 " free(tokens);"                                                   "\n"
-			 "}"                                                                "\n\n"
-			 // Add the token_list_add(token_list* tokens, int type, char* value, int value_len)
-			 "void token_list_add(token_list* tokens, int type, char* value, int value_len) {\n"
-			 " token* tok = &tokens->items[tokens->count];"                     "\n"
-			 " tok->type = type;"                                             	"\n"
-			 " tok->value = tokens->data_ptr;"                                	"\n"
-			 " memcpy(tok->value, value, value_len);"                      		"\n"
-			 " tok->value[value_len] = 0;"                               	    "\n"
-			 " tokens->data_ptr += value_len+1;"                                "\n"
-			 " tokens->count++;"												"\n"
-			 "}"                                                                "\n\n";
 	}
 
 	/**
@@ -309,9 +251,7 @@ namespace pgen
 		s << mCode.code() << endl;
 		
 		this->codeDefines(s);
-		this->codeStructs(s);
 		this->codeGlobals(s);
-		this->codeTokenListHelper(s);
 		this->codeNextToken(s);
 		this->codeNumTokens(s);
 		this->codeTokenizeStringLen(s);

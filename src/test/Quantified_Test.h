@@ -66,7 +66,7 @@ namespace pgen
 			// test with a digit quantified between 2 an 5 times [0-9]{2,5} (greedy)
 			Range *r = new Range('0','9');
 			Quantified *q = new Quantified(r, 2, 5, true);
-			ICompilableTest::compileSource(*q, q->expr->compile());
+			ICompilableTest::compileSource(*q, Code::getHeader(), q->expr->compile());
 			ICompilableTest::assert("0", 255,__FILE__,__LINE__); 		// false
 			ICompilableTest::assert("00", 2,__FILE__,__LINE__);		// true
 			ICompilableTest::assert("09", 2,__FILE__,__LINE__);		// true
@@ -92,7 +92,7 @@ namespace pgen
 			// since the expression can match 0 to 3 characters, all expressions are valid (matching 0 characters).
 			// since it is a lazy match, they all should match 0 characters.
 			// the lazy match is useful when chained.
-			ICompilableTest::compileSource(*q, q->expr->compile());
+			ICompilableTest::compileSource(*q, Code::getHeader(), q->expr->compile());
 			ICompilableTest::assert("a",0, __FILE__,__LINE__);
 			ICompilableTest::assert("ab",0, __FILE__,__LINE__);
 			ICompilableTest::assert("abc",0, __FILE__,__LINE__);;

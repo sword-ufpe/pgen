@@ -107,7 +107,7 @@ tokens:
   # Equivalent to SPARQL PNAME_NS definition
   -
     name: PREFIXNAME
-    regex: '([:PN_CHARS_BASE:]([:PN_CHARS:.]*[:PN_CHARS:]))?:'
+    regex: '[:PN_CHARS_BASE:]([:PN_CHARS:.]*[:PN_CHARS:])?:'
   # RFC3987 IRI definition as a single regular expression
   -
     name: FULLIRI
@@ -621,7 +621,7 @@ grammar:
   - superObjectPropertyExpression: 
     - ObjectPropertyExpression 
   - ObjectPropertyExpression: 
-    - ObjectProperty          
+    - ObjectProperty
     - InverseObjectProperty 
   - InverseObjectProperty: 
     - OBJECTINVERSEOF LPAR ObjectProperty RPAR 

@@ -393,9 +393,10 @@ namespace pgen
 	 */
 	void Language::compileParseHelpers(ostream& s)
 	{
-		s << "parse_result* " << prefix << "parse_string(char* text) {"										"\n"
+		s << "parse_result* " << prefix << "parse_string(const char* text) {"								"\n"
 			 " int i;"																						"\n"
 			 " parse_result* pr = (parse_result*) malloc(sizeof(parse_result));"							"\n"
+			 " memset(pr, 0, sizeof(parse_result));"														"\n"
 			 " pr->tokens = " << prefix << "tokenize_string(text);"											"\n"
 			 " if (pr->tokens == NULL) {"																	"\n"
 			 "  printf(\"Invalid Input at position %d, '%s'\\n\", " << prefix << "inv_token_pos, " << prefix << "inv_token_txt);\n"
@@ -406,12 +407,15 @@ namespace pgen
 			 " pr->ast = " << prefix << "parse(pr->tokens, &i);"											"\n"
 			 " return pr;"																					"\n"
 			 "}"																							"\n\n"
-			 "parse_result* " << prefix << "parse_file(char* fileName) {"									"\n"
+			 "parse_result* " << prefix << "parse_file(const char* fileName) {"									"\n"
 			 " int i;"																						"\n"
 			 " parse_result* pr = (parse_result*) malloc(sizeof(parse_result));"							"\n"
+			 " memset(pr, 0, sizeof(parse_result));"														"\n"
 			 " pr->tokens = " << prefix << "tokenize_file(fileName);"										"\n"
 			 " if (pr->tokens == NULL) {"																	"\n"
-			 "  printf(\"Invalid Input at position %d, '%s'\\n\", " << prefix << "inv_token_pos, " << prefix << "inv_token_txt);\n"
+			 "  if (errno == 0) {"																			"\n"
+			 "   printf(\"Invalid Input at position %d, '%s'\\n\", " << prefix << "inv_token_pos, " << prefix << "inv_token_txt);\n"
+			 "  }"																							"\n"
 			 "  parse_result_free(pr);"																		"\n"
 			 "  return NULL;"																				"\n"
 			 " }"																							"\n"
@@ -429,8 +433,8 @@ namespace pgen
 		s << "#ifndef __" << this->prefix << "_H"										"\n"
 			 "#define __" << this->prefix << "_H"										"\n\n"
 		  << Code::getHeader() << 														"\n"
-			 "parse_result* " << this->prefix << "parse_file(char* fileName);"			"\n"
-			 "parse_result* " << this->prefix << "parse_string(char* buffer);"			"\n\n";
+			 "parse_result* " << this->prefix << "parse_file(const char* fileName);"	"\n"
+			 "parse_result* " << this->prefix << "parse_string(const char* buffer);"	"\n\n";
 		for (unsigned int id = 0; id < ruleList.size(); id++) 
 		{
 			s << "#define " << this->prefix << ruleList[id] << " " << (id+1000000000)<<"\n";

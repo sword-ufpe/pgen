@@ -1,0 +1,31 @@
+Parser Generator for C99 
+
+The parser generator (pgen) is able to generate parsers for C99 with support for the UTF-8 charset. The
+pgen was developed in C++11.
+
+It provides a way to describe both the lexical analyzer and the syntax analyzer on a single YAML file.
+
+The parser generator is currently under development.
+
+Features:
+ * Integrated Lexical Analyzer Generator with UTF-8 regular expression support
+ * Supports the definition of custom named regular expression classes
+ * UTF-8 Support
+ * Recursive Descent LL(*) Parser Generator
+ * Generates C99 code
+ * Reads all lexical and syntactic definitions from a single YAML file
+ * Automatically Generates Abstract Syntax Trees
+ * Supports the definition of states for the Lexical Analyzer
+
+Dependences:
+ * yaml-cpp
+ * boost (for yaml-cpp)
+ * cppunit (for testing)
+ * gcc (for testing)
+
+Planned (Future) Changes:
+ * More Unit Tests
+ * Documentation
+ * Benchmarking
+ * LALR(1) parser generator
+

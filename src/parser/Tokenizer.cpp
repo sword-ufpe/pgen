@@ -120,7 +120,7 @@ namespace pgen
      */
     void Tokenizer::codeNextToken(stringstream &s) 
     {
-        s << "int next_token(char* text, int* pos) {"                                                               "\n";
+        s << "int next_token(const char* text, int* pos) {"                                                               "\n";
         for (int i = 0, sz = typeList.size(); i < sz; i++) {
             for (auto kv: typeList) {
                 if (kv.second->typeId == i) {
@@ -144,7 +144,7 @@ namespace pgen
      */
     void Tokenizer::codeNumTokens(stringstream &s) 
     {
-        s << "int " << fnNameNumTokens() << "(char* text, int len) {"                                               "\n"
+        s << "int " << fnNameNumTokens() << "(const char* text, int len) {"                                               "\n"
              " int pos = 0;"                                                                                        "\n"
              " int p;"                                                                                              "\n"
              " int tok = 0;"                                                                                        "\n"
@@ -172,7 +172,7 @@ namespace pgen
      */
     void Tokenizer::codeTokenizeStringLen(stringstream &s) 
     {
-        s << "token_list* " << fnNameTokenizeStringLen() << "(char* text, int len) {\n"
+        s << "token_list* " << fnNameTokenizeStringLen() << "(const char* text, int len) {\n"
              " int pos = 0;"                                                                                        "\n"
              " int tokenId;"                                                                                        "\n"
              " token_list* tokens;"                                                                                 "\n"
@@ -202,7 +202,7 @@ namespace pgen
      */
     void Tokenizer::codeTokenizeString(stringstream &s) 
     {
-        s << "token_list* " << fnNameTokenizeString() << "(char* text) {"                                           "\n"
+        s << "token_list* " << fnNameTokenizeString() << "(const char* text) {"                                           "\n"
              " return " << fnNameTokenizeStringLen() << "(text, (int)strlen_utf8(text));"                           "\n"
              "}"                                                                                                  "\n\n";
     }
@@ -215,12 +215,14 @@ namespace pgen
      */
     void Tokenizer::codeTokenizeFile(stringstream &s) 
     {
-        s << "token_list* " << fnNameTokenizeFile() << "(char* fileName) {"                                         "\n"
+        s << "token_list* " << fnNameTokenizeFile() << "(const char* fileName) {"                                   "\n"
              " int len;"                                                                                            "\n"
              " char* text;"                                                                                         "\n"
              " token_list* tokens;"                                                                                 "\n"
              " FILE* f = fopen(fileName, \"r\");"                                                                   "\n"
              " if (f == NULL) {"                                                                                    "\n"
+			 "  printf(\"Could not open %s\\n\", fileName);"														"\n"
+			 "  errno = 1;"																							"\n"
              "  return NULL;"                                                                                       "\n"
              " }"                                                                                                   "\n"
              " fseek(f, 0, SEEK_END);"                                                                              "\n"
@@ -232,6 +234,7 @@ namespace pgen
              " text[len] = 0;"                                                                                      "\n"
              " tokens = " << fnNameTokenizeStringLen() << "(text, len);"                                            "\n"
              " free(text);"                                                                                         "\n"
+			 " errno = 0;"																							"\n"
              " return tokens;"                                                                                      "\n"
              "}"                                                                                                  "\n\n";
     }

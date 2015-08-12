@@ -63,7 +63,7 @@ namespace pgen
 	string ICompilable::prototype() 
 	{
 		stringstream s;
-		s << "int " << this->funcname() << "(char* text)";
+		s << "int " << this->funcname() << "(const char* text)";
 		return s.str();
 	}
 
@@ -76,7 +76,7 @@ namespace pgen
 	string ICompilable::cprototype() 
 	{
 		stringstream s;
-		s << "int " << this->cfuncname() << "(char* text, chainptr *chain)";
+		s << "int " << this->cfuncname() << "(const char* text, chainptr *chain)";
 		return s.str();
 	}
 	

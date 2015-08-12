@@ -54,10 +54,13 @@ namespace pgen
 				}
 			}
 			// TODO: remove the printf and put the code that must run when matched
-			s << " return subtree;"																	"\n" <<
-				 _funcName << "_" << alternativeNumber++ << 										":\n"
-				 " *pos = opos;"																	"\n"
-				 " ast_clear(subtree);"																"\n";
+			s << " return subtree;"																	"\n";
+			if (option->size() > 0)
+			{
+				s << _funcName << "_" << alternativeNumber++ << 									":\n"
+					 " *pos = opos;"																"\n"
+					 " ast_clear(subtree);"															"\n";
+			}
 		}
 		s << " free(subtree);"																		"\n"
 			 " return NULL;"																		"\n"
